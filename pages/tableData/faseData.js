@@ -2,7 +2,8 @@ export const ProductServiceFase = {
     getProductsData() {
         return [
             {
-                DiarioReal: 1000,
+                Fase: "Fase 1",
+                DiarioReal: 2000,
                 DiarioPlan: 2000,
                 KPI1: 0.5,
                 SemanaISOReal: 3000,

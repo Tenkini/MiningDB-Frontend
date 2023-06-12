@@ -2,6 +2,7 @@ export const ProductServiceRajo = {
     getProductsData() {
         return [
             {
+                Rajo: "Rajo 1",
                 DiarioReal: 1000,
                 DiarioPlan: 2000,
                 KPI1: 0.5,

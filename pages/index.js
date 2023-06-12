@@ -7,10 +7,12 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ProductServiceRajo } from './tableData/rajoData';
 import { ProductServiceFase } from './tableData/faseData';
+import { ProductServiceFlota} from './tableData/flotaData';
 
 export default function StripedRowsDemo() {
   const [productsRajo, setProductsRajo] = useState([]);
   const [productsFase, setProductsFase] = useState([]);
+  const [productsFlota, setProductsFlota] = useState([]);
   const [expandedRowsRajo, setExpandedRowsRajo] = useState([]);
   const [expandedRowsFase, setExpandedRowsFase] = useState([]);
 
@@ -25,17 +27,28 @@ export default function StripedRowsDemo() {
   useEffect(() => {
     ProductServiceRajo.getProductsMini().then((data) => setProductsRajo(data));
     ProductServiceFase.getProductsMini().then((data) => setProductsFase(data));
+    ProductServiceFlota.getProductsMini().then((data) => setProductsFlota(data));
   }, []);
 
-  const expandedRowTemplate = (rowData) => {
+  const expandedRowFase = (rowData) => {
     return (
       <div className="expanded-row-content">
         <DataTable
-          value={[rowData]} // Pass the expanded row data as an array
+          value={rowData} // Pass the expanded row data as an array
+          expandedRows={expandedRowsFase}
+          onRowToggle={onRowToggleFase}
+          rowExpansionTemplate={expandedRowFlota(productsFlota)}
           className="p-datatable-expanded-row hide-header" // Add the hide-header class
           tableStyle={{ width: '100%' }}
           header={null} // Set the header to null to hide it
         >
+          <Column
+          expander
+          style={{ width: '3rem', textAlign: 'center' }}
+          bodyStyle={{ textAlign: 'center' }}
+          headerStyle={{ textAlign: 'center' }}
+          />
+          <Column field="Fase"/>
           <Column field="DiarioReal" />
           <Column field="DiarioPlan" />
           <Column field="KPI1" />
@@ -56,6 +69,36 @@ export default function StripedRowsDemo() {
     );
   };
   
+  const expandedRowFlota = (rowData) => {
+    return (
+      <div className="expanded-row-content">
+        <DataTable
+          value={rowData} // Pass the expanded row data as an array
+          className="p-datatable-expanded-row hide-header" // Add the hide-header class
+          tableStyle={{ width: '100%' }}
+          header={null} // Set the header to null to hide it
+        >
+          
+          <Column field="Flota"/>
+          <Column field="DiarioReal" />
+          <Column field="DiarioPlan" />
+          <Column field="KPI1" />
+          <Column field="SemanaISOReal" />
+          <Column field="SemanaISOPlan" />
+          <Column field="KPI2" />
+          <Column field="SemanaReal" />
+          <Column field="SemanaPlan" />
+          <Column field="KPI3" />
+          <Column field="MensualReal" />
+          <Column field="MensualPlan" />
+          <Column field="KPI4" />
+          <Column field="AnualReal" />
+          <Column field="AnualPlan" />
+          <Column field="KPI5" />
+        </DataTable>
+      </div>
+    );
+  };
 
   return (
     <div className="card">
@@ -80,7 +123,7 @@ export default function StripedRowsDemo() {
         value={productsRajo}
         expandedRows={expandedRowsRajo}
         onRowToggle={onRowToggleRajo}
-        rowExpansionTemplate={expandedRowTemplate}
+        rowExpansionTemplate={expandedRowFase(productsFase)}
         className="p-datatable-striped p-datatable-hoverable-rows"
         tableStyle={{ minWidth: '50rem' }}
       >
@@ -90,6 +133,7 @@ export default function StripedRowsDemo() {
           bodyStyle={{ textAlign: 'center' }}
           headerStyle={{ textAlign: 'center' }}
         />
+        <Column field="Rajo" header="Rajo" />
         <Column field="DiarioReal" header="Diario Real" />
         <Column field="DiarioPlan" header="Diario Plan" />
         <Column field="KPI1" header="KPI" />
@@ -106,36 +150,7 @@ export default function StripedRowsDemo() {
         <Column field="AnualPlan" header="Anual Plan" />
         <Column field="KPI5" header="KPI" />
       </DataTable>
-      <DataTable
-        value={productsFase}
-        expandedRows={expandedRowsFase}
-        onRowToggle={onRowToggleFase}
-        rowExpansionTemplate={expandedRowTemplate}
-        className="p-datatable-striped p-datatable-hoverable-rows"
-        tableStyle={{ minWidth: '50rem' }}
-      >
-        <Column
-          expander
-          style={{ width: '3rem', textAlign: 'center' }}
-          bodyStyle={{ textAlign: 'center' }}
-          headerStyle={{ textAlign: 'center' }}
-        />
-        <Column field="DiarioReal" header="Diario Real" />
-        <Column field="DiarioPlan" header="Diario Plan" />
-        <Column field="KPI1" header="KPI" />
-        <Column field="SemanaISOReal" header="Semana ISO Real" />
-        <Column field="SemanaISOPlan" header="Semana ISO Plan" />
-        <Column field="KPI2" header="KPI" />
-        <Column field="SemanaReal" header="Semana Real" />
-        <Column field="SemanaPlan" header="Semana Plan" />
-        <Column field="KPI3" header="KPI" />
-        <Column field="MensualReal" header="Mensual Real" />
-        <Column field="MensualPlan" header="Mensual Plan" />
-        <Column field="KPI4" header="KPI" />
-        <Column field="AnualReal" header="Anual Real" />
-        <Column field="AnualPlan" header="Anual Plan" />
-        <Column field="KPI5" header="KPI" />
-      </DataTable>
+      
     </div>
   );
 }
