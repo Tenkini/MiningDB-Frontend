@@ -8,6 +8,7 @@ body{
   padding:0;
   margin:0;
   font-family: var(--font-family);
+  background-color: #f1eff3;
 }
 
 a{
@@ -23,4 +24,8 @@ td {
 
 .hide-header .p-datatable-thead {
   display: none;
+}
+
+.border-custom-gray {
+  border-color: #aeb2be;
 }
