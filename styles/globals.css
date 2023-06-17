@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 
+
 html,
 body{
   padding:0;
   margin:0;
-  font-family: var(--font-family);
-  background-color: #f1eff3;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  list-style: none;
 }
 
 a{
@@ -26,6 +29,119 @@ td {
   display: none;
 }
 
-.border-custom-gray {
-  border-color: #aeb2be;
+/* NAVBAR */
+header{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 12%;
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+}
+
+.navbar{
+  display: flex;
+}
+.navbar li{
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 5px 0;
+  margin: 0px 30px;
+  transition: all .50s ease;
+}
+
+
+.theme-changer{
+  display: flex;
+  align-items: center;
+}
+
+
+#menu-icon{
+  font-size: 35px;
+  cursor: pointer;
+  z-index: 10001;
+  display: none;
+}
+
+@media (max-width: 1420px){
+  header{
+      padding: 14px 2%;
+      transition: .2s;
+  }
+  .navbar li{
+      padding: 5px 0;
+      margin: 0px 20px;
+  }
+}
+
+@media (max-width: 1080px){
+  #menu-icon{
+      display: block;
+      padding-left: 5px;
+  }
+  .navbar{
+      align-items: center;
+      position: absolute;
+      top: -800px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      transition: all .50s ease;
+      text-align: left;
+  }
+
+  .navbar li{
+      display: block;
+      padding: 1rem;
+      margin: 0.8rem;
+  }
+  .navbar.open{
+      top: 100%;
+      align-items: center;
+  }
+}
+
+/* switch theme */
+#checkbox {
+  display: none;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 26px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+.switch > * {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.switch__ball {
+  left: 1px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transition: transform 0.5s cubic-bezier(0.52, -0.4, 0.27, 1.55);
+}
+.bx.bx-sun {
+  left: 5px;
+}
+.bx.bx-moon {
+  right: 5px;
+}
+#checkbox:checked + .switch__ball {
+  transform: translate(29px, -50%);
 }

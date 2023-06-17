@@ -1,5 +1,8 @@
 import TablaDesplegable from './tablaDesplegable';
+import TopNavbar from "./TopNavbar";
+import Link from "next/link";
 import Script from 'next/script';
+import { useTheme } from "next-themes";
 
 const MiPagina = () => {
   const data = [
@@ -123,7 +126,8 @@ const MiPagina = () => {
 
   return (
     <div>
-      <TablaDesplegable data={data} />
+      <TopNavbar/>
+      
     </div>
   );
 };

@@ -14,7 +14,19 @@ module.exports = {
       },
       colors: {
         'shadow-table' : 'rgba(114, 114, 113, 0.5)',
+        'BgLight':'#F1EFF3',
+        'BgDark' : '#151818',
+        'MainLight' : '#FFFFFF',
+        'MainDark' : '#1E2124',
+        'TextLight' : '#555555',
+        'TextDark' : '#FFFFFF',
+        'BorderLight' : '#AEB2BE',
+        'BorderDark' : '#FFFFFF',
+        'TextHover' : '#1FABFF'
       },
+      screens:{
+        'navbreak': '1080px'
+      }
     },
   },
   plugins: [
