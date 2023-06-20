@@ -18,7 +18,7 @@ function TopNavbar() {
     }, []);
 
     if (!mounted) return null;
-    const currentTheme = theme === systemTheme ? theme : systemTheme;
+    const currentTheme = theme === 'system' ? systemTheme : theme;
     console.log(systemTheme)
     return (
         
