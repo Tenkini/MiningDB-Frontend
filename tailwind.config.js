@@ -1,11 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       backgroundImage: {
@@ -26,7 +26,8 @@ module.exports = {
         'TextHover' : '#1FABFF'
       },
       screens:{
-        'navbreak': '1080px'
+        'navbreak': '1080px',
+        'navmedium': '1420px'
       }
     },
   },

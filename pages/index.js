@@ -3,7 +3,7 @@ import TopNavbar from "./TopNavbar";
 import Link from "next/link";
 import Script from 'next/script';
 import { useTheme } from "next-themes";
-
+import { useState, useEffect } from "react";
 const MiPagina = () => {
   const data = [
     {
@@ -123,11 +123,15 @@ const MiPagina = () => {
       ]
     }
   ];
-
+  const {theme, setTheme} = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(()=> setMounted(true), [])
+  if(!mounted) return null
   return (
-    <div>
+    
+    <div className='w-screen h-screen bg-BgLight dark:bg-BgDark'>
       <TopNavbar/>
-      
+      <TablaDesplegable data={data}/>
     </div>
   );
 };
