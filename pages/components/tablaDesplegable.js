@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BiPlusCircle, BiMinusCircle} from "react-icons/bi";
 
 const TablaDesplegable = ({ data }) => {
   const [expandedRows, setExpandedRows] = useState([]);
@@ -18,10 +19,10 @@ const TablaDesplegable = ({ data }) => {
     <>
       {data.map((rajo, rajoIndex) => {
         const isRajoExpanded = expandedRows.includes(rajoIndex);
-
+        const rowAnimationClass = isRajoExpanded ? 'row-expanded' : '';
         return (
-          <div className='overflow-x-auto bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)] '>
-            <table className="table-auto text-TextLight dark:text-TextDark" key={rajoIndex}>
+          <div className={`overflow-x-auto text-left bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)] '`}>
+            <table className="table-auto text-TextLight dark:text-TextDark w-full" key={rajoIndex}>
               <thead>
                 <tr>
                   <th className='border-b border-custom-gray'></th>
@@ -49,10 +50,10 @@ const TablaDesplegable = ({ data }) => {
                 <tr>
                   <td>
                     <button
-                      className={`expand-button ${isRajoExpanded ? 'expanded' : ''} `}
+                      className={`flex items-center justify-center w-10 h-10 expand-button ${isRajoExpanded ? 'expanded' : ''} `}
                       onClick={() => toggleRow(rajoIndex)}
                     >
-                      {isRajoExpanded ? '-' : '+'}
+                      {isRajoExpanded ? <BiMinusCircle className='w-6 h-6'/> : <BiPlusCircle className='w-6 h-6'/>}
                     </button>
                   </td>
                   <td className="p-2">{rajo.rajo}</td>
@@ -80,16 +81,19 @@ const TablaDesplegable = ({ data }) => {
 
                     return (
                       <React.Fragment key={faseIndex}>
-                        <tr className=''>
-                          <td className='border-t border-custom-gray'></td>
+                        <tr className={`${rowAnimationClass}`}>
                           <td className='border-t border-custom-gray'></td>
                           <td className='border-t border-custom-gray'>
-                            <button
-                              className={`expand-button ${isFaseExpanded ? 'expanded' : ''}`}
-                              onClick={() => toggleRow(`${rajoIndex}-${faseIndex}`)}
-                            >
-                              {isFaseExpanded ? '-' : '+'}
-                            </button>
+                            <div className='flex items-center justify-center h-full'>
+                              <button
+                                  className={`flex items-center justify-center w-10 h-10 expand-button ${isFaseExpanded ? 'expanded' : ''}`}
+                                  onClick={() => toggleRow(`${rajoIndex}-${faseIndex}`)}
+                                >
+                                  {isFaseExpanded ? <BiMinusCircle className='w-6 h-6'/> : <BiPlusCircle className='w-6 h-6'/>}
+                                </button>
+                            </div>
+                          </td>
+                          <td className='border-t border-custom-gray'>
                             {fase.fase}
                           </td>
                           <td className='border-t border-custom-gray'></td>
@@ -113,7 +117,7 @@ const TablaDesplegable = ({ data }) => {
                           fase.flotas.map((flota, flotaIndex) => (
                             <tr
                               key={flotaIndex}
-                              className={`child-row `}
+                              className={`child-row ${rowAnimationClass}`}
                             >
                               <td className='border-t border-custom-gray'></td>
                               <td className='border-t border-custom-gray'></td>

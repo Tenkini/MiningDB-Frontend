@@ -1,5 +1,5 @@
-import TablaDesplegable from './tablaDesplegable';
-import TopNavbar from "./TopNavbar";
+import TablaDesplegable from './components/tablaDesplegable';
+import TopNavbar from "./components/TopNavbar";
 import Link from "next/link";
 import Script from 'next/script';
 import { useTheme } from "next-themes";
@@ -123,7 +123,6 @@ const MiPagina = () => {
       ]
     }
   ];
-  const {theme, setTheme} = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(()=> setMounted(true), [])
   if(!mounted) return null

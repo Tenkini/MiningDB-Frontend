@@ -28,6 +28,9 @@ module.exports = {
       screens:{
         'navbreak': '1080px',
         'navmedium': '1420px'
+      },
+      transitionProperty: {
+        'height': 'height',
       }
     },
   },

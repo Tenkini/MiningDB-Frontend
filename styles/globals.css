@@ -49,6 +49,7 @@ header{
 
 .navbar{
   display: flex;
+  
 }
 .navbar li{
   font-size: 1.1rem;
@@ -110,6 +111,7 @@ header{
       display: block;
       padding: 1rem;
       margin: 0.8rem;
+      transition: none;
   }
   .navbar.open{
       top: 100%;
@@ -150,4 +152,21 @@ header{
 }
 #checkbox:checked + .switch__ball {
   transform: translate(29px, -50%);
+}
+
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.row-expanded {
+  animation-name: slideDown;
+  animation-duration: .50s;
 }

@@ -8,20 +8,14 @@ import { useTheme } from "next-themes";
 
 function TopNavbar() {
     const {theme, setTheme} = useTheme()
-    //const { systemTheme, theme, setTheme } = useTheme();
+
     const [navbar, setNavbar] = useState(false);
-    //const [mounted, setMounted] = useState(false);
+
     const [enabledSwitch, setEnabledSwitch] = useState(false)
     const [showModal, setShowModal] = useState(false);
-    /*useEffect(() => {
-        setMounted(true);
-    }, []);*/
 
-    //if (!mounted) return null;
-    //const currentTheme = theme === 'system' ? systemTheme : theme;
-    //console.log(systemTheme)
     return (
-        <div className="transition duration-500 ease-in-out pb-24 navmedium:pb-36 ">
+        <div className=" pb-24 navmedium:pb-36 ">
             <header className="bg-MainLight dark:bg-MainDark ">
                 <Image className="logo z-10 h-50 w-50"
                     src="antofagasta minerals.svg"
@@ -52,16 +46,11 @@ function TopNavbar() {
                         ) : (
                             <div class="bx bx-menu" id="menu-icon"></div>
                         )}
-                        
                     </button>
-                    
                 </div>
             </header>
         </div>
 
-
-
-        
     );
 }
 
