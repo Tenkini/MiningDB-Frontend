@@ -5,6 +5,9 @@ import { BiMenu, BiMoon, BiSun, BiX } from "react-icons/bi";
 import { Switch } from '@headlessui/react'
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import EditarCarga from "./editarCarga";
+
+
 
 function TopNavbar() {
     const {theme, setTheme} = useTheme()
@@ -24,14 +27,13 @@ function TopNavbar() {
                     alt="Logo Antofagasta Minerals"
                     />
                 <ul className={`navbar navbreak:bg-transparent bg-MainLight text-TextLight dark:bg-MainDark dark:text-TextDark ${navbar ? 'open' : ''}`}>
-                    <li className="hover:text-TextHover">Reportes</li>
-                    <li className="hover:text-TextHover">Editar Carga</li>
+                    <li className="hover:text-TextHover"> Reportes</li>
+                    <li className="hover:text-TextHover"><button><EditarCarga>Editar Carga</EditarCarga></button></li>
                     <li className="hover:text-TextHover">Crear Usuario</li>
                     <li className="hover:text-TextHover">Exportar</li>
                     <li className="hover:text-TextHover">Cambiar Contraseña</li>
                     <li className="hover:text-TextHover">Salir</li>
                 </ul>
-
                 <div class="theme-changer">
                     <label role="button" for="checkbox" className="switch border-2 border-TextLight dark:border-TextDark">
                         

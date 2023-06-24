@@ -9,9 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.15",
+    "@mui/material": "^5.13.6",
+    "@mui/x-date-pickers": "^6.9.0",
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.14",
+    "dayjs": "^1.11.8",
     "next": "^13.4.4",
     "next-themes": "^0.2.1",
     "postcss": "^8.4.23",
