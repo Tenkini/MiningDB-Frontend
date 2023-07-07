@@ -1,5 +1,6 @@
 import TablaDesplegable from './components/tablaDesplegable';
 import TopNavbar from "./components/TopNavbar";
+import Login from "./components/login"
 import Link from "next/link";
 import Script from 'next/script';
 import { useTheme } from "next-themes";
@@ -129,8 +130,8 @@ const MiPagina = () => {
   return (
     
     <div className='w-screen h-screen bg-BgLight dark:bg-BgDark'>
-      <TopNavbar/>
-      <TablaDesplegable data={data}/>
+      <Login/>
+
     </div>
   );
 };
