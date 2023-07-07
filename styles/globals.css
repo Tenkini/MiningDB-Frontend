@@ -170,3 +170,10 @@ header{
   animation-name: slideDown;
   animation-duration: .50s;
 }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad del color de fondo según tus necesidades */
+}
