@@ -11,9 +11,11 @@ import { FaFacebookF,FaGoogle,FaEnvelope,FaRegEnvelope} from 'react-icons/fa';
 import {MdLockOutline} from 'react-icons/md';
 
 
-const Login = () => {
+const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [message,setMessage] = useState(false);
 
     const handle = async () => {
         try {
@@ -36,12 +38,13 @@ const Login = () => {
         // Guarda el token en el almacenamiento local
         localStorage.setItem('token', token);
         localStorage.setItem('userType', userType);
+        props.login()
 
-
-
+        console.log(response.data);
         } catch (error) {
         // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
             console.log("Usuario invalido")
+            setMessage(true)
         }
     };
 
@@ -60,6 +63,11 @@ const Login = () => {
                 <div className="py-10">
                   <h2 className="text-3xl font-bold text-blue mb-2">Bienvenido</h2>
                   <div className="border-2 w-10 border-blue inline-block mb-2"></div>
+                  
+                  {message && <p className="text-red-500">Usuario o Contraseña invalida</p>}
+                  
+
+
                   <div className="flex flex-col items-center">
                     <div className="bg-gray-100 w-full sm:w-64 p-2 flex items-center mb-3">
                       <FaRegEnvelope className="text-gray-400 m-2"/>

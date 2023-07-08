@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 const MiPagina = () => {
+
   const data = [
     {
       rajo: "rajo 1",
@@ -125,14 +126,20 @@ const MiPagina = () => {
     }
   ];
   const [mounted, setMounted] = useState(false)
+  const [loged,setLoged] = useState(false)
+  const login = ()=> setLoged(true)
   useEffect(()=> setMounted(true), [])
   if(!mounted) return null
   return (
     
+    
     <div className='w-screen h-screen bg-BgLight dark:bg-BgDark'>
-      <Login/>
+
+      { loged === false ? <Login login={login}/> :  <div><TopNavbar/><TablaDesplegable data={data}/></div>    }
+      
 
     </div>
+    
   );
 };
 
