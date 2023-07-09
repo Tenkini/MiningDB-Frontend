@@ -5,6 +5,7 @@ import Link from "next/link";
 import Script from 'next/script';
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import TablaUsuarios from './components/superAdminPage';
 const MiPagina = () => {
 
   const data = [
@@ -143,4 +144,4 @@ const MiPagina = () => {
   );
 };
 
-export default MiPagina;
+export default TablaUsuarios;
