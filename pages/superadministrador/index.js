@@ -1,15 +1,16 @@
+import TopNavbar from "./components/TopNavbar";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import TablaUsuarios from "./components/superAdminPage";
 const MiPagina = () => {
   const [mounted, setMounted] = useState(false);
+  const [loged, setLoged] = useState(false);
+  const login = () => setLoged(true);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
-  const router = useRouter();
-  router.push("/login");
   return (
     <div className="w-screen h-screen bg-BgLight dark:bg-BgDark">
-      {/*<Login/> */}
-      {/*loged === false ? <Login login={login}/> :  <div><TopNavbar/><TablaDesplegable data={data}/></div>    */}
+      <TopNavbar />
+      <TablaUsuarios />
     </div>
   );
 };

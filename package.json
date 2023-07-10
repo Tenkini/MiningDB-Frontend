@@ -17,6 +17,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
+    "cookies-next": "^2.1.2",
     "cors": "^2.8.5",
     "dayjs": "^1.11.8",
     "next": "^13.4.4",

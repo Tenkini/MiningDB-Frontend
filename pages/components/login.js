@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { useState,useEffect } from "react";
 import { useTheme } from "next-themes";
 import axios from 'axios';
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
+import {useRouter} from 'next/router';
 
 import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] })
@@ -14,12 +15,12 @@ import {MdLockOutline} from 'react-icons/md';
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const [message,setMessage] = useState(false);
+    const router = useRouter();
 
     const handle = async () => {
         try {
-            const response = await axios.post('http://chitanda.vgaprint.cl:3000/login', {
+            const response = await axios.post('http://localhost:80/login', {
                 email: email,
                 password: password,
         },{
@@ -29,17 +30,14 @@ const Login = (props) => {
               'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Encabezados permitidos
             },
         });
-        
         // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
-
         // Obtén el token de la respuesta del servidor
         const token = response.data.token;
         const userType = response.data.user_type;
         // Guarda el token en el almacenamiento local
         localStorage.setItem('token', token);
         localStorage.setItem('userType', userType);
-        props.login()
-
+        router.push('/../administrador');
         console.log(response.data);
         } catch (error) {
         // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
@@ -88,7 +86,8 @@ const Login = (props) => {
                       </label>
                       <a href="#" className="text-xs">¿Has olvidado tu contraseña?</a>
                     </div>
-                    <button className="border-2 border-blue text-blue rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue hover:text-white" onClick={handle}>
+                    <button className="border-2 border-blue text-blue rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue hover:text-white" 
+                      onClick={handle}>
                         Iniciar Sesion
                     </button>
 
