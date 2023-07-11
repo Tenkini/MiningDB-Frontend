@@ -19,7 +19,14 @@ const TablaUsuarios = () => {
   };
 
   const handleConfirmarEdicion = (id) => {
-    console.log('Guardar cambios para la fila con ID:', id);
+    setFilasEjemplo((prevFilas) => {
+      return prevFilas.map((usuario) => {
+        if (usuario.id === id) {
+          return { ...usuario, ...valoresEditados };
+        }
+        return usuario;
+      });
+    });
     setFilaEditada(null);
     setValoresEditados({});
   };
