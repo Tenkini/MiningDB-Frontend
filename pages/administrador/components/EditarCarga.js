@@ -10,7 +10,19 @@ function EditarCarga() {
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [selectedOrigen, setSelectedOrigen] = useState([]);
   const [selectedFlota, setSelectedFlota] = useState([]);
-  const [value, setValue] = React.useState(null);
+  const [valueFechaInicio, setValueFechaInicio] = React.useState(null);
+  const [valueFechaFin, setValueFechaFin] = React.useState(null);
+
+
+  const handleKeyPress = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+
+    // Solo permite caracteres numéricos (0-9)
+    if (!/^[0-9]+$/.test(keyValue)) {
+      event.preventDefault();
+    }
+  };
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -32,9 +44,9 @@ function EditarCarga() {
             <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
               <h2 className="text-2xl font-bold mb-4 text-TextHover">Nuevo Facto de Carga</h2>
 
-              <div className="mb-8">
+              <div className="mb-5">
                 <label className="block font-bold mb-2 text-TextLight dark:text-TextDark">Origen</label>
-                <Autocomplete
+                <Autocomplete className='bg-white'
                   multiple
                   options={['Opción 1', 'Opción 2', 'Opción 3']}
                   value={selectedOrigen}
@@ -49,6 +61,7 @@ function EditarCarga() {
                         '& .MuiOutlinedInput-input': {
                           padding: '12px 16px',
                           fontSize: '1rem',
+                          
                         },
                       }}
                     />
@@ -61,9 +74,9 @@ function EditarCarga() {
                 />
               </div>
 
-              <div className="mb-8">
+              <div className="mb-5">
                 <label className="block font-bold mb-2 text-TextLight dark:text-TextDark">Flota</label>
-                <Autocomplete
+                <Autocomplete className='bg-white'
                   multiple
                   options={['Flota 1', 'Flota 2', 'Flota 3']}
                   value={selectedFlota}
@@ -90,12 +103,12 @@ function EditarCarga() {
                 />
               </div>
 
-              <div className="mb-8">
+              <div className="mb-5">
                 <label className="block font-bold mb-2 text-TextLight dark:text-TextDark">Fecha Inicio</label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    value={value}
-                    onChange={(newValue) => setValue(newValue)}
+                  <DatePicker className='bg-white'
+                    value={valueFechaInicio}
+                    onChange={(newValue) => setValueFechaInicio(newValue)}
                     sx={{
                       width: '100%',
                       minWidth: '300px',
@@ -103,6 +116,30 @@ function EditarCarga() {
                     }}
                   />
                 </LocalizationProvider>
+              </div>
+
+              <div className="mb-5">
+                <label className="block font-bold mb-2 text-TextLight dark:text-TextDark">Fecha Fin</label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker className='bg-white'
+                    value={valueFechaFin}
+                    onChange={(newValue) => setValueFechaFin(newValue)}
+                    sx={{
+                      width: '100%',
+                      minWidth: '300px',
+                      minHeight: '48px',
+                    }}
+                  />
+                </LocalizationProvider>
+              </div>
+              
+              <div className="mb-5">
+                <label className="block font-bold mb-2 text-TextLight dark:text-TextDark">Factor de Carga</label>
+                <TextField className='bg-white' focused
+                  placeholder='Ingrese un Numero'
+                  variant="outlined"
+                  onKeyPress={handleKeyPress}
+                />
               </div>
 
               <button

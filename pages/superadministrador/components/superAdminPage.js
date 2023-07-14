@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineEdit, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
@@ -42,14 +43,14 @@ const TablaUsuarios = () => {
 
   return (
     <div className="overflow-x-auto text-left bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)]">
-      <table className="table-auto text-TextLight dark:text-TextDark w-full">
+      <table className="ml-2  text-TextLight dark:text-TextDark w-full">
         <thead>
           <tr>
-            <th className="border-b border-custom-gray"></th>
-            <th className="p-2 border-b border-custom-gray">correo</th>
-            <th className="p-2 border-b border-custom-gray">contraseña</th>
-            <th className="p-2 border-b border-custom-gray">tipo de usuario</th>
-            <th className="p-2 border-b border-custom-gray"></th>
+            <th className=" border-b border-custom-gray"></th>
+            <th className=" border-b border-custom-gray">correo</th>
+            <th className=" border-b border-custom-gray">contraseña</th>
+            <th className=" border-b border-custom-gray">tipo de usuario</th>
+            <th className=" border-b border-custom-gray"></th>
           </tr>
         </thead>
         <tbody>
@@ -132,3 +133,4 @@ const TablaUsuarios = () => {
 };
 
 export default TablaUsuarios;
+
