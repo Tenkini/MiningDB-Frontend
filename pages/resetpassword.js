@@ -3,32 +3,22 @@ import axios from "axios";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
-import { setCookie } from "cookies-next";
 const inter = Inter({ subsets: ["latin"] });
-import {
-  FaFacebookF,
-  FaGoogle,
-  FaEnvelope,
-  FaRegEnvelope,
-} from "react-icons/fa";
-import { MdLockOutline } from "react-icons/md";
+import { FaRegEnvelope } from "react-icons/fa";
 
-function LoginPage() {
-  const { theme, setTheme } = useTheme();
+function Resetpassword() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
-  const [message, setMessage] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [message, setMessage] = useState("");
   const router = useRouter();
 
   const handle = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}resetpassword`;
       const response = await axios.post(
         url,
         {
           email: email,
-          password: password,
         },
         {
           headers: {
@@ -38,29 +28,12 @@ function LoginPage() {
           },
         }
       );
-      // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
-      // Obtén el token de la respuesta del servidor
-      const token = response.data.token;
-      const userType = response.data.user_type;
-      setCookie("token", token);
-      setCookie("userType", userType);
-      if (remember === true) {
-        setCookie("remember", true);
-      }
-      if (userType === "guest") {
-        router.push("/visita");
-      } else if (userType === "admin") {
-        router.push("/administrador");
-      } else if (userType === "superadmin") {
-        router.push("/superadministrador");
-      }
-      //console.log(response.data);
+      setMessage("Correo enviado correctamente, revise su bandeja de entrada")
     } catch (error) {
-      // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
-      console.log("Usuario invalido");
-      setMessage(true);
+        setMessage("Ha ocurrido un error")
     }
   };
+
   return (
     <div className="w-screen h-screen bg-BgLight dark:bg-BgDark">
       <div>
@@ -98,14 +71,12 @@ function LoginPage() {
               </div>
               <div className="py-10">
                 <h2 className="text-3xl font-bold text-TextHover mb-2 dark:text-TextDark">
-                  Bienvenido
+                  Recuperar Contraseña
                 </h2>
                 <div className="border-2 w-10 border-blue inline-block mb-2"></div>
-
-                {message && (
-                  <p className="text-red-500">Usuario o Contraseña invalida</p>
-                )}
-
+                {
+                  <p className="text-red-500">{message}</p>
+                }
                 <div className="flex flex-col items-center ">
                   <div className="bg-gray-100 w-full sm:w-64 p-2 flex items-center mb-3 rounded-full">
                     <FaRegEnvelope className="text-gray-400 m-2" />
@@ -117,39 +88,12 @@ function LoginPage() {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-
-                  <div className="bg-gray-100 w-full sm:w-64 p-2 flex items-center mb-3 rounded-full">
-                    <MdLockOutline className="text-gray-400 m-2" />
-                    <input
-                      type="password"
-                      name="Password"
-                      placeholder="Contraseña"
-                      className="bg-gray-100 outline-none text-sm flex-1"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex flex-col sm:flex-row justify-between w-full sm:w-64 mb-5">
-                    <label className="flex items-center text-xs text-TextLight dark:text-TextDark">
-                      <input
-                        type="checkbox"
-                        name="remember"
-                        className="mr-1 checked:bg-red-500"
-                        onChange={(e) => setRemember(!remember)}
-                      />{" "}
-                      Recordar
-                    </label>
-                    <a
-                      href="resetpassword"
-                      className="text-xs text-TextLight dark:text-TextDark"
-                    >
-                      ¿Has olvidado tu contraseña?
-                    </a>
-                  </div>
+                  <div className="flex flex-col sm:flex-row justify-between w-full sm:w-64 mb-5"></div>
                   <button
                     className="hover:bg-TextHover border-2 border-TextHover text-TextHover rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue hover:text-white dark:text-TextDark"
                     onClick={handle}
                   >
-                    Iniciar Sesion
+                    Enviar
                   </button>
                 </div>
               </div>
@@ -161,4 +105,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default Resetpassword;

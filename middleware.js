@@ -3,15 +3,15 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const token = request.cookies.get("token");
   const userType = request.cookies.get("userType");
-  console.log(userType);
   if (request.nextUrl.pathname.includes("/visita")) {
     if (token === undefined || userType === undefined) {
       return NextResponse.redirect(new URL("/login", request.url))
     }
     if (userType === "guest") {
       try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}validateGuest`
         const response = await axios.post(
-          "http://localhost:80/validateGuest",
+          url,
           {
             token: token,
             user_type: userType,
