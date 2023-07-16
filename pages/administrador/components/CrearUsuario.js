@@ -5,14 +5,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-function EditarCarga() {
+function CrearUsuario() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
-  const [selectedOrigen, setSelectedOrigen] = useState([]);
-  const [selectedFlota, setSelectedFlota] = useState([]);
-  const [valueFechaInicio, setValueFechaInicio] = React.useState(null);
-  const [valueFechaFin, setValueFechaFin] = React.useState(null);
-
+  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedName, setSelectedName] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState([]);
+  
 
   const handleKeyPress = (event) => {
     const keyCode = event.keyCode || event.which;
@@ -36,26 +35,26 @@ function EditarCarga() {
 
   return (
     <div>
-      <button onClick={handleDialogOpen}>Editar Carga</button>
+      <button onClick={handleDialogOpen}>Crear Usuario</button>
 
       {overlayOpen && (
         <div className="overlay">
           <div className="popup">
             <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
-              <h2 className="text-2xl font-bold mb-1 text-TextHover">Nuevo Facto de Carga</h2>
+              <h2 className="text-2xl font-bold mb-1 text-TextHover">Nuevo Usuario</h2>
 
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Origen</label>
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Tipo de Usuario</label>
                 <Autocomplete className='bg-white'
                   multiple
                   options={['Opción 1', 'Opción 2', 'Opción 3']}
-                  value={selectedOrigen}
-                  onChange={(event, value) => setSelectedOrigen(value)}
+                  value={selectedUser}
+                  onChange={(event, value) => setSelectedUser(value)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       variant="outlined"
-                      placeholder="Seleccione el origen"
+                      placeholder="Seleccione el Usuario"
                       sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-input': {
@@ -74,70 +73,13 @@ function EditarCarga() {
                 />
               </div>
 
-              <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Flota</label>
-                <Autocomplete className='bg-white'
-                  multiple
-                  options={['Flota 1', 'Flota 2', 'Flota 3']}
-                  value={selectedFlota}
-                  onChange={(event, value) => setSelectedFlota(value)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="Seleccione la flota"
-                      sx={{
-                        width: '100%',
-                        '& .MuiOutlinedInput-input': {
-                          padding: '12px 16px',
-                          fontSize: '1rem',
-                        },
-                      }}
-                    />
-                  )}
-                  sx={{
-                    width: '100%',
-                    minWidth: '300px',
-                    minHeight: '48px',
-                  }}
-                />
-              </div>
 
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Fecha Inicio</label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className='bg-white'
-                    value={valueFechaInicio}
-                    onChange={(newValue) => setValueFechaInicio(newValue)}
-                    sx={{
-                      width: '100%',
-                      minWidth: '300px',
-                      minHeight: '48px',
-                    }}
-                  />
-                </LocalizationProvider>
-              </div>
-
-              <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Fecha Fin</label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className='bg-white'
-                    value={valueFechaFin}
-                    onChange={(newValue) => setValueFechaFin(newValue)}
-                    sx={{
-                      width: '100%',
-                      minWidth: '300px',
-                      minHeight: '48px',
-                      borderColor:'blue',
-                    }}
-                  />
-                </LocalizationProvider>
-              </div>
-              
-              <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Factor de Carga</label>
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Nombre</label>
                 <TextField className='bg-white' 
-                  placeholder='Ingrese un Numero'
+                  value={selectedName}
+                  onChange={(event, value) => setSelectedName(value)}
+                  placeholder='Ingrese el Nombre'
                   variant="outlined"
                   sx={{
                     width: '100%',
@@ -148,7 +90,26 @@ function EditarCarga() {
                   
                 />
               </div>
+
+              <div className="mb-0">
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Correo</label>
+                <TextField className='bg-white' 
+                  value={selectedEmail}
+                  onChange={(event, value) => setSelectedEmail(value)}
+                  placeholder='Ingrese el Correo'
+                  variant="outlined"
+                  sx={{
+                    width: '100%',
+                    minWidth: '300px',
+                    minHeight: '48px',
+                    
+                  }}
+                  
+                />
+              </div>
+
               <div>
+
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
                 onClick={handleDialogClose}
@@ -187,4 +148,4 @@ function EditarCarga() {
   );
 }
 
-export default EditarCarga;
+export default CrearUsuario;

@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import EditarCarga from "./EditarCarga";
-
-
-
+import CrearUsuario from "./CrearUsuario";
+import Exportar from "./Exportar";
+import CambiarContraseña from "./CambiarContraseña";
 function TopNavbar() {
     const {theme, setTheme} = useTheme()
 
@@ -26,9 +26,9 @@ function TopNavbar() {
                 <ul className={`navbar navbreak:bg-transparent bg-MainLight text-TextLight dark:bg-MainDark dark:text-TextDark ${navbar ? 'open' : ''}`}>
                     <li className="hover:text-TextHover"> Reportes</li>
                     <li className="hover:text-TextHover"><button><EditarCarga>Editar Carga</EditarCarga></button></li>
-                    <li className="hover:text-TextHover">Crear Usuario</li>
-                    <li className="hover:text-TextHover">Exportar</li>
-                    <li className="hover:text-TextHover">Cambiar Contraseña</li>
+                    <li className="hover:text-TextHover"><button><CrearUsuario>Crear Usuario</CrearUsuario></button></li>
+                    <li className="hover:text-TextHover"><button><Exportar>Exportar</Exportar></button></li>
+                    <li className="hover:text-TextHover"><button><CambiarContraseña>Cambiar Contraseña</CambiarContraseña></button></li>
                     <li className="hover:text-TextHover">Salir</li>
                 </ul>
                 <div class="theme-changer">
