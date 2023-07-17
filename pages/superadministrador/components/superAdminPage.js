@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,  useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineDelete, AiOutlineLock, AiOutlineUser } from 'react-icons/ai';
 import CambiarTipoPopup from './CambiarTipoPopup';
 import CambiarPermisosPopup from './CambiarPermisosPopup';
+import PopupContext from "./PopupContext";
 
 const TablaUsuarios = () => {
   const [filasEjemplo, setFilasEjemplo] = useState([
@@ -15,6 +16,15 @@ const TablaUsuarios = () => {
   const [mostrarTipoPopup, setMostrarTipoPopup] = useState(false);
   const [mostrarPermisosPopup, setMostrarPermisosPopup] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const { isPopupOpen, setPopupOpen } = useContext(PopupContext);
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
 
   const handleEliminar = (id) => {
     const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar este usuario?');
@@ -28,6 +38,7 @@ const TablaUsuarios = () => {
     setUsuarioSeleccionado(usuario);
     setMostrarPermisosPopup(true);
     setMostrarTipoPopup(false);
+    openPopup();
   };
 
   const handleCambiarTipo = (id) => {
@@ -35,6 +46,7 @@ const TablaUsuarios = () => {
     setUsuarioSeleccionado(usuario);
     setMostrarTipoPopup(true);
     setMostrarPermisosPopup(false);
+    openPopup();
   };
 
   const handleChangeTipoUsuario = (nuevoTipo) => {
@@ -112,7 +124,7 @@ const TablaUsuarios = () => {
       {mostrarTipoPopup && (
         <CambiarTipoPopup
           usuario={usuarioSeleccionado}
-          onClose={() => setMostrarTipoPopup(false)}
+          onClose={() => [setMostrarTipoPopup(false), closePopup()]}
           onChangeTipo={handleChangeTipoUsuario}
         />
       )}
@@ -120,7 +132,7 @@ const TablaUsuarios = () => {
       {mostrarPermisosPopup && (
         <CambiarPermisosPopup
           usuario={usuarioSeleccionado}
-          onClose={() => setMostrarPermisosPopup(false)}
+          onClose={() => [setMostrarPermisosPopup(false), closePopup()]}
           onChangePermisos={handleChangePermisosUsuario}
         />
       )}

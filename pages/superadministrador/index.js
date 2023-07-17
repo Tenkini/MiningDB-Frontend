@@ -1,6 +1,7 @@
 import TopNavbar from "./components/TopNavbar";
 import { useState, useEffect } from "react";
 import TablaUsuarios from "./components/superAdminPage";
+import { PopupProvider } from "./components/PopupContext";
 const MiPagina = () => {
   const [mounted, setMounted] = useState(false);
   const [loged, setLoged] = useState(false);
@@ -8,10 +9,12 @@ const MiPagina = () => {
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
   return (
-    <div className="w-screen h-screen bg-BgLight dark:bg-BgDark">
-      <TopNavbar />
-      <TablaUsuarios />
-    </div>
+    <PopupProvider>
+      <div className="w-screen h-screen bg-BgLight dark:bg-BgDark">
+        <TopNavbar />
+        <TablaUsuarios />
+      </div>
+    </PopupProvider>
   );
 };
 

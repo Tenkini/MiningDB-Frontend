@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Image from 'next/image'
 import { useTheme } from "next-themes";
 import CrearUsuario from "./CrearUsuario";
+import PopupContext from "./PopupContext";
 
 function TopNavbar({ showPopup }) {
     const { theme, setTheme } = useTheme();
     const [navbar, setNavbar] = useState(false);
-
+    const { isPopupOpen, setPopupOpen } = useContext(PopupContext);
     return (
-        <div className={`pb-24 navmedium:pb-36 ${showPopup ? 'bg-opacity-75' : ''}`}>
+        <div className={`pb-24 navmedium:pb-36 ${isPopupOpen ? "opacity-75" : ""}`}>
             <header className="bg-MainLight dark:bg-MainDark ">
                 <Image className="logo z-10 h-50 w-50"
                     src="antofagasta minerals.svg"

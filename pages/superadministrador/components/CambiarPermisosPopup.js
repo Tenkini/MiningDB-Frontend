@@ -30,7 +30,7 @@ const CambiarPermisosPopup = ({ usuario, onClose, onChangePermisos }) => {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500  bg-opacity-75">
       <div className="bg-MainLight dark:bg-MainDark p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-4 text-TextLight dark:text-TextDark">Cambiar permisos del usuario</h2>
         <form onSubmit={handleSubmit}>
