@@ -24,7 +24,7 @@ const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
-      <div className="bg-white p-4 rounded shadow">
+      <div className="bg-MainLight dark:bg-MainDark p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-4">Cambiar tipo de usuario</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
