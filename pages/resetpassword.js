@@ -14,7 +14,7 @@ function Resetpassword() {
 
   const handle = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}resetpassword`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}generatePassword`;
       const response = await axios.post(
         url,
         {
@@ -28,7 +28,7 @@ function Resetpassword() {
           },
         }
       );
-      setMessage("Correo enviado correctamente, revise su bandeja de entrada")
+      setMessage("Se ha enviado una nueva contraseña a su correo")
     } catch (error) {
         setMessage("Ha ocurrido un error")
     }

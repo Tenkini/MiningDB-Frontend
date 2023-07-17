@@ -22,43 +22,78 @@ function LoginPage() {
   const router = useRouter();
 
   const handle = async () => {
-    try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
-      const response = await axios.post(
-        url,
-        {
-          email: email,
-          password: password,
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
-            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+    if (remember) {
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
+        const response = await axios.post(
+          url,
+          {
+            email: email,
+            password: password,
           },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            },
+          }
+        );
+        // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
+        // Obtén el token de la respuesta del servidor
+        const token = response.data.token;
+        const userType = response.data.user_type;
+        setCookie("token", token);
+        setCookie("userType", userType);
+        if (userType === "guest") {
+          router.push("/visita");
+        } else if (userType === "admin") {
+          router.push("/administrador");
+        } else if (userType === "superadmin") {
+          router.push("/superadministrador");
         }
-      );
-      // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
-      // Obtén el token de la respuesta del servidor
-      const token = response.data.token;
-      const userType = response.data.user_type;
-      setCookie("token", token);
-      setCookie("userType", userType);
-      if (remember === true) {
-        setCookie("remember", true);
+        //console.log(response.data);
+      } catch (error) {
+        // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
+        console.log("Usuario invalido");
+        setMessage(true);
       }
-      if (userType === "guest") {
-        router.push("/visita");
-      } else if (userType === "admin") {
-        router.push("/administrador");
-      } else if (userType === "superadmin") {
-        router.push("/superadministrador");
+    } else {
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
+        const response = await axios.post(
+          url,
+          {
+            email: email,
+            password: password,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            },
+          }
+        );
+        // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
+        // Obtén el token de la respuesta del servidor
+        const token = response.data.token;
+        const userType = response.data.user_type;
+        setCookie("token", token);
+        setCookie("userType", userType);
+        if (userType === "guest") {
+          router.push("/visita");
+        } else if (userType === "admin") {
+          router.push("/administrador");
+        } else if (userType === "superadmin") {
+          router.push("/superadministrador");
+        }
+        //console.log(response.data);
+      } catch (error) {
+        // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
+        console.log("Usuario invalido");
+        setMessage(true);
       }
-      //console.log(response.data);
-    } catch (error) {
-      // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
-      console.log("Usuario invalido");
-      setMessage(true);
     }
   };
   return (

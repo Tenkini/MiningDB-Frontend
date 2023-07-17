@@ -8,28 +8,10 @@ function TopNavbar() {
   const { theme, setTheme } = useTheme();
   const [navbar, setNavbar] = useState(false);
   const router = useRouter();
-  const logout = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:80/logout",
-        {
-          token: localStorage.getItem("token"),
-        },
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
-            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
-          },
-        }
-      );
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("usertype");
-      router.push('/../login');
-    } catch (error) {
-      router.push('/../login');
-    }
+  const handlelogout = async () => {
+    deleteCookie("token");
+    deleteCookie("userType");
+    router.push("/../login");
   };
   return (
     <div className=" pb-24 navmedium:pb-36 ">
@@ -50,7 +32,7 @@ function TopNavbar() {
           <li className="hover:text-TextHover">Exportar</li>
           <li className="hover:text-TextHover">Cambiar Contraseña</li>
           <li className="hover:text-TextHover">
-            <button onClick={() => logout()}>Salir</button>
+            <button onClick={handlelogout}>Salir</button>
           </li>
         </ul>
         <div class="theme-changer">
