@@ -2,6 +2,8 @@ import React from "react";
 import Image from 'next/image'
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import CrearUsuario from "./CrearUsuario";
+
 function TopNavbar() {
     const {theme, setTheme} = useTheme()
     const [navbar, setNavbar] = useState(false);
@@ -15,7 +17,7 @@ function TopNavbar() {
                     alt="Logo Antofagasta Minerals"
                     />
                 <ul className={`navbar navbreak:bg-transparent bg-MainLight text-TextLight dark:bg-MainDark dark:text-TextDark ${navbar ? 'open' : ''}`}>
-                    <li className="hover:text-TextHover">Cambiar Contraseña</li>
+                <li className="hover:text-TextHover"><button><CrearUsuario>Añadir Usuario</CrearUsuario></button></li>
                     <li className="hover:text-TextHover">Salir</li>
                 </ul>
                 <div class="theme-changer">
