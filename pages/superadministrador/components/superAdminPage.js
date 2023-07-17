@@ -1,21 +1,60 @@
 import React, { useState } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineDelete, AiOutlineLock, AiOutlineUser } from 'react-icons/ai';
+import CambiarTipoPopup from './CambiarTipoPopup';
+import CambiarPermisosPopup from './CambiarPermisosPopup';
 
 const TablaUsuarios = () => {
   const [filasEjemplo, setFilasEjemplo] = useState([
-    { id: 1, correo: 'ejemplo1@example.com', tipo: 'tipo1' },
-    { id: 2, correo: 'ejemplo2@example.com', tipo: 'tipo2' },
-    { id: 3, correo: 'ejemplo3@example.com', tipo: 'tipo3' },
+    { id: 1, correo: 'carlos.ibanez@minerals.com', tipo: 'visita', permisos: ['rajo 1'] },
+    { id: 2, correo: 'diego.gonzales@minerals.com', tipo: 'admin', permisos: ['rajo 1', 'rajo 2'] },
+    { id: 3, correo: 'rodrigo.vega@minerals.com', tipo: 'admin', permisos: ['rajo 2', 'rajo 4'] },
+    { id: 4, correo: 'daniel.bassano@minerals.com', tipo: 'visita', permisos: ['rajo 3'] },
   ]);
 
+  const [mostrarTipoPopup, setMostrarTipoPopup] = useState(false);
+  const [mostrarPermisosPopup, setMostrarPermisosPopup] = useState(false);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+
   const handleEliminar = (id) => {
+    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar este usuario?');
+    if (confirmacion) {
+      setFilasEjemplo((prevFilas) => prevFilas.filter((usuario) => usuario.id !== id));
+    }
   };
 
   const handleCambiarPermisos = (id) => {
+    const usuario = filasEjemplo.find((usuario) => usuario.id === id);
+    setUsuarioSeleccionado(usuario);
+    setMostrarPermisosPopup(true);
+    setMostrarTipoPopup(false);
   };
 
   const handleCambiarTipo = (id) => {
+    const usuario = filasEjemplo.find((usuario) => usuario.id === id);
+    setUsuarioSeleccionado(usuario);
+    setMostrarTipoPopup(true);
+    setMostrarPermisosPopup(false);
+  };
+
+  const handleChangeTipoUsuario = (nuevoTipo) => {
+    setFilasEjemplo((prevFilas) =>
+      prevFilas.map((usuario) =>
+        usuario.id === usuarioSeleccionado.id ? { ...usuario, tipo: nuevoTipo } : usuario
+      )
+    );
+    setMostrarTipoPopup(false);
+    setUsuarioSeleccionado(null);
+  };
+
+  const handleChangePermisosUsuario = (nuevosPermisos) => {
+    setFilasEjemplo((prevFilas) =>
+      prevFilas.map((usuario) =>
+        usuario.id === usuarioSeleccionado.id ? { ...usuario, permisos: nuevosPermisos } : usuario
+      )
+    );
+    setMostrarPermisosPopup(false);
+    setUsuarioSeleccionado(null);
   };
 
   return (
@@ -36,7 +75,7 @@ const TablaUsuarios = () => {
               <td className="text-lg">{usuario.correo}</td>
               <td className="text-lg">{usuario.tipo}</td>
               <td>
-                <div className="flex justify-center">
+                <div className="flex justify-center space-x-4">
                   <button
                     className="hover:text-red-500 text-lg"
                     onClick={() => handleEliminar(usuario.id)}
@@ -67,6 +106,22 @@ const TablaUsuarios = () => {
           ))}
         </tbody>
       </table>
+
+      {mostrarTipoPopup && (
+        <CambiarTipoPopup
+          usuario={usuarioSeleccionado}
+          onClose={() => setMostrarTipoPopup(false)}
+          onChangeTipo={handleChangeTipoUsuario}
+        />
+      )}
+
+      {mostrarPermisosPopup && (
+        <CambiarPermisosPopup
+          usuario={usuarioSeleccionado}
+          onClose={() => setMostrarPermisosPopup(false)}
+          onChangePermisos={handleChangePermisosUsuario}
+        />
+      )}
     </div>
   );
 };
