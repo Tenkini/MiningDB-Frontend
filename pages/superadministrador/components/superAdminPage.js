@@ -65,6 +65,7 @@ const TablaUsuarios = () => {
             <th className="border-b border-custom-gray"></th>
             <th className="border-b border-custom-gray">Correo</th>
             <th className="border-b border-custom-gray">Tipo de Usuario</th>
+            <th className="border-b border-custom-gray">Permisos</th>
             <th className="border-b border-custom-gray"></th>
           </tr>
         </thead>
@@ -74,6 +75,7 @@ const TablaUsuarios = () => {
               <td className="text-lg">{usuario.id}</td>
               <td className="text-lg">{usuario.correo}</td>
               <td className="text-lg">{usuario.tipo}</td>
+              <td className="text-lg">{usuario.permisos.join(', ')}</td>
               <td>
                 <div className="flex justify-center space-x-4">
                   <button
