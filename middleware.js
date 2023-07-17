@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const token = request.cookies.get("token");
   const userType = request.cookies.get("userType");
-  if (request.nextUrl.pathname.includes("/visita")) {
+  /*if (request.nextUrl.pathname.includes("/visita")) {
     if (token === undefined || userType === undefined) {
       return NextResponse.redirect(new URL("/login", request.url))
     }
@@ -29,7 +29,7 @@ export async function middleware(request) {
         return NextResponse.redirect(new URL("/login"), request.url);
       }
     }
-  }
+  }*/
 
   return NextResponse.next();
 }

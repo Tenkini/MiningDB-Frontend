@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
+import CambiarContraseña from "./CambiarContraseña";
+import Exportar from "./Exportar";
 
 function TopNavbar() {
   const { theme, setTheme } = useTheme();
@@ -29,8 +31,12 @@ function TopNavbar() {
           }`}
         >
           <li className="hover:text-TextHover"> Reportes</li>
-          <li className="hover:text-TextHover">Exportar</li>
-          <li className="hover:text-TextHover">Cambiar Contraseña</li>
+          <li className="hover:text-TextHover">
+            <Exportar>Exportar</Exportar>
+          </li>
+          <li className="hover:text-TextHover">
+            <CambiarContraseña>Cambiar Contraseña</CambiarContraseña>
+          </li>
           <li className="hover:text-TextHover">
             <button onClick={handlelogout}>Salir</button>
           </li>
