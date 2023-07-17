@@ -40,11 +40,11 @@ function CambiarContraseña() {
       {overlayOpen && (
         <div className="overlay">
           <div className="popup">
-            <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
+            <div className="bg-MainLight dark:bg-MainDark rounded-lg p-8 max-w-lg">
               <h2 className="text-2xl font-bold mb-1 text-TextHover">Cambiar Contraseña</h2>
 
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Contraseña Actual</label>
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Contraseña Actual</label>
                 <TextField className='bg-white' 
                   value={selectedContraseaActual}
                   onChange={(event, value) => setSelectedContraseaActual(value)}
@@ -61,7 +61,7 @@ function CambiarContraseña() {
               </div>
 
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Nueva Contraseña</label>
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Nueva Contraseña</label>
                 <TextField className='bg-white' 
                   value={selectedNuevaContraseña}
                   onChange={(event, value) => setSelectedNuevaContraseña(value)}

@@ -40,7 +40,7 @@ function CrearUsuario() {
       {overlayOpen && (
         <div className="overlay">
           <div className="popup">
-            <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
+            <div className="bg-MainLight dark:bg-MainDark rounded-lg p-8 max-w-lg">
               <h2 className="text-2xl font-bold mb-1 text-TextHover">Nuevo Usuario</h2>
 
               <div className="mb-0">

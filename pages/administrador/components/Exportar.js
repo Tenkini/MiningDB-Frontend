@@ -40,23 +40,29 @@ function Exportar() {
       {overlayOpen && (
         <div className="overlay">
           <div className="popup">
-            <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
+            <div className="bg-MainLight dark:bg-MainDark rounded-lg p-8 max-w-lg">
               <h2 className="text-2xl font-bold mb-1 text-TextHover">¿Seguro que quieres exportar la tabla?</h2>
-
-              
-
-              <div>
-
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2 mr-3"
                 onClick={handleDialogClose}
+                sx={{
+                  width: '100%',
+                  minWidth: '300px',
+                  minHeight: '48px',
+                  
+                }}
               >
                 Si
-              </button>
-              </div>     
+              </button>  
               <button
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2"
                 onClick={handleDialogClose}
+                sx={{
+                  width: '100%',
+                  minWidth: '300px',
+                  minHeight: '48px',
+                  
+                }}
               >
                 No
               </button>
