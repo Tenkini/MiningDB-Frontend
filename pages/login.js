@@ -22,6 +22,21 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const speakMessage = (message) => {
+    // Verificar si la API de síntesis de voz es compatible
+    if ('speechSynthesis' in window) {
+      // Crear un nuevo objeto SpeechSynthesisUtterance
+      const utterance = new SpeechSynthesisUtterance(message);
+
+      // Reproducir el mensaje en voz alta
+      speechSynthesis.speak(utterance);
+    } else {
+      // La API de síntesis de voz no es compatible con este navegador.
+      // Puedes mostrar un mensaje de error o proporcionar otra retroalimentación.
+      console.log('La API de síntesis de voz no es compatible con este navegador.');
+    }
+  };
+
   const handle = async () => {
     setLoading(true);
     
@@ -48,7 +63,8 @@ function LoginPage() {
         const userType = response.data.user_type;
         setCookie("token", token);
         setCookie("userType", userType);
-
+       
+        
         setTimeout(()=>setLoading(false),5000)
         if (userType === "guest") {
           router.push("/visita");
@@ -94,6 +110,8 @@ function LoginPage() {
         } else if (userType === "root") {
           router.push("/superadministrador");
         }
+        const message = "¡Bienvenido!";
+        speakMessage(message);
         //console.log(response.data);
       } catch (error) {
         // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
