@@ -1,17 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { IconContext } from 'react-icons';
-import { AiOutlineDelete, AiOutlineLock, AiOutlineUser } from 'react-icons/ai';
-import CambiarTipoPopup from './CambiarTipoPopup';
-import CambiarPermisosPopup from './CambiarPermisosPopup';
+import React, { useState, useContext, useEffect } from "react";
+import { IconContext } from "react-icons";
+import { AiOutlineDelete, AiOutlineLock, AiOutlineUser } from "react-icons/ai";
+import CambiarTipoPopup from "./CambiarTipoPopup";
+import CambiarPermisosPopup from "./CambiarPermisosPopup";
 import PopupContext from "./PopupContext";
-
+import { getCookie } from "cookies-next";
+import axios from "axios";
 const TablaUsuarios = () => {
-  const [filasEjemplo, setFilasEjemplo] = useState([
-    { id: 1, correo: 'carlos.ibanez@minerals.com', tipo: 'visita', permisos: ['rajo 1'] },
-    { id: 2, correo: 'diego.gonzales@minerals.com', tipo: 'admin', permisos: ['rajo 1', 'rajo 2'] },
-    { id: 3, correo: 'rodrigo.vega@minerals.com', tipo: 'admin', permisos: ['rajo 2', 'rajo 4'] },
-    { id: 4, correo: 'daniel.bassano@minerals.com', tipo: 'visita', permisos: ['rajo 3'] },
-  ]);
+  const [filasEjemplo, setFilasEjemplo] = useState([]);
 
   const [mostrarTipoPopup, setMostrarTipoPopup] = useState(false);
   const [mostrarPermisosPopup, setMostrarPermisosPopup] = useState(false);
@@ -27,9 +23,13 @@ const TablaUsuarios = () => {
   };
 
   const handleEliminar = (id) => {
-    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar este usuario?');
+    const confirmacion = window.confirm(
+      "¿Estás seguro de que quieres eliminar este usuario?"
+    );
     if (confirmacion) {
-      setFilasEjemplo((prevFilas) => prevFilas.filter((usuario) => usuario.id !== id));
+      setFilasEjemplo((prevFilas) =>
+        prevFilas.filter((usuario) => usuario.id !== id)
+      );
     }
   };
 
@@ -52,21 +52,100 @@ const TablaUsuarios = () => {
   const handleChangeTipoUsuario = (nuevoTipo) => {
     setFilasEjemplo((prevFilas) =>
       prevFilas.map((usuario) =>
-        usuario.id === usuarioSeleccionado.id ? { ...usuario, tipo: nuevoTipo } : usuario
+        usuario.id === usuarioSeleccionado.id
+          ? { ...usuario, tipo: nuevoTipo }
+          : usuario
       )
     );
     setMostrarTipoPopup(false);
     setUsuarioSeleccionado(null);
   };
 
-  const handleChangePermisosUsuario = (nuevosPermisos) => {
+  const handleChangePermisosUsuario = async (nuevosPermisos) => {
     setFilasEjemplo((prevFilas) =>
       prevFilas.map((usuario) =>
-        usuario.id === usuarioSeleccionado.id ? { ...usuario, permisos: nuevosPermisos } : usuario
+        usuario.id === usuarioSeleccionado.id
+          ? { ...usuario, permisos: nuevosPermisos }
+          : usuario
       )
     );
     setMostrarPermisosPopup(false);
     setUsuarioSeleccionado(null);
+
+    try {
+      // Aquí llamamos nuevamente a la función userData para obtener los datos actualizados
+      const data = await userData();
+      setFilasEjemplo(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const userData = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}root/getUsers`;
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen (esto es innecesario en el cliente)
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos (esto es innecesario en el cliente)
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos (esto es innecesario en el cliente)
+            Authorization: `${getCookie("token")}`,
+          },
+        }
+      );
+
+      const usersWithPermissions = await Promise.all(
+        response.data.map(async (user) => {
+          const permissionsUrl = `${process.env.NEXT_PUBLIC_API_URL}root/getPermissions`;
+          const permissionsResponse = await axios.post(
+            permissionsUrl,
+            {
+              email: user.correo,
+            },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*", // Permitir cualquier origen (esto es innecesario en el cliente)
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos (esto es innecesario en el cliente)
+                "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos (esto es innecesario en el cliente)
+                Authorization: `${getCookie("token")}`,
+              },
+            }
+          );
+
+          return {
+            ...user,
+            permisos: permissionsResponse.data,
+          };
+        })
+      );
+
+      return usersWithPermissions; // Devuelve los usuarios con sus respectivos permisos
+    } catch (error) {
+      console.error(error);
+      throw error; // Lanza el error para que pueda ser capturado por el componente principal
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await userData(); // Llama a la función que hace la solicitud a la API
+        setFilasEjemplo(data); // Actualiza el estado con los datos obtenidos
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData(); // Ejecuta la función para obtener los datos cuando el componente se monte
+  }, []);
+
+  const closeAndRefresh = () => {
+    setMostrarPermisosPopup(false);
+    setUsuarioSeleccionado(null);
+    fetchData(); // Llama a la función fetchData para obtener los datos actualizados
   };
 
   return (
@@ -84,17 +163,31 @@ const TablaUsuarios = () => {
         <tbody>
           {filasEjemplo.map((usuario) => (
             <tr key={usuario.id} className="h-16">
-              <td className="text-lg px-4 border-t border-custom-gray">{usuario.id}</td>
-              <td className="text-lg border-t border-custom-gray">{usuario.correo}</td>
-              <td className="text-lg border-t border-custom-gray">{usuario.tipo}</td>
-              <td className="text-lg border-t border-custom-gray">{usuario.permisos.join(', ')}</td>
-              <td className='border-t border-custom-gray'>
+              <td className="text-lg px-4 border-t border-custom-gray">
+                {usuario.id}
+              </td>
+              <td className="text-lg border-t border-custom-gray">
+                {usuario.correo}
+              </td>
+              <td className="text-lg border-t border-custom-gray">
+                {usuario.tipo}
+              </td>
+
+              <td className="text-lg border-t border-custom-gray">
+                {usuario.permisos.some((rajo) => rajo.Permiso === "True")
+                  ? usuario.permisos
+                      .filter((rajo) => rajo.Permiso === "True")
+                      .map((rajo) => rajo.Rajo)
+                      .join(", ")
+                  : "Sin permisos"}
+              </td>
+              <td className="border-t border-custom-gray">
                 <div className="flex justify-center space-x-4">
                   <button
                     className="hover:text-red-500 text-lg "
                     onClick={() => handleEliminar(usuario.id)}
                   >
-                    <IconContext.Provider value={{ className: 'w-6 h-6' }}>
+                    <IconContext.Provider value={{ className: "w-6 h-6" }}>
                       <AiOutlineDelete />
                     </IconContext.Provider>
                   </button>
@@ -102,7 +195,7 @@ const TablaUsuarios = () => {
                     className="hover:text-yellow-500 text-lg"
                     onClick={() => handleCambiarPermisos(usuario.id)}
                   >
-                    <IconContext.Provider value={{ className: 'w-6 h-6' }}>
+                    <IconContext.Provider value={{ className: "w-6 h-6" }}>
                       <AiOutlineLock />
                     </IconContext.Provider>
                   </button>
@@ -110,7 +203,7 @@ const TablaUsuarios = () => {
                     className="hover:text-green-500 text-lg"
                     onClick={() => handleCambiarTipo(usuario.id)}
                   >
-                    <IconContext.Provider value={{ className: 'w-6 h-6' }}>
+                    <IconContext.Provider value={{ className: "w-6 h-6" }}>
                       <AiOutlineUser />
                     </IconContext.Provider>
                   </button>
@@ -134,6 +227,7 @@ const TablaUsuarios = () => {
           usuario={usuarioSeleccionado}
           onClose={() => [setMostrarPermisosPopup(false), closePopup()]}
           onChangePermisos={handleChangePermisosUsuario}
+          closeAndRefresh={closeAndRefresh} // Pasar la función closeAndRefresh al componente CambiarPermisosPopup
         />
       )}
     </div>
