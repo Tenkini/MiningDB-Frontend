@@ -70,7 +70,7 @@ const TablaUsuarios = () => {
   };
 
   return (
-    <div className="text-left bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)]">
+    <div className="overflow-x-auto text-left bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)]">
       <table className="text-TextLight dark:text-TextDark w-full">
         <thead>
           <tr>
@@ -84,14 +84,14 @@ const TablaUsuarios = () => {
         <tbody>
           {filasEjemplo.map((usuario) => (
             <tr key={usuario.id} className="h-16">
-              <td className="text-lg px-4">{usuario.id}</td>
-              <td className="text-lg">{usuario.correo}</td>
-              <td className="text-lg">{usuario.tipo}</td>
-              <td className="text-lg">{usuario.permisos.join(', ')}</td>
-              <td>
+              <td className="text-lg px-4 border-t border-custom-gray">{usuario.id}</td>
+              <td className="text-lg border-t border-custom-gray">{usuario.correo}</td>
+              <td className="text-lg border-t border-custom-gray">{usuario.tipo}</td>
+              <td className="text-lg border-t border-custom-gray">{usuario.permisos.join(', ')}</td>
+              <td className='border-t border-custom-gray'>
                 <div className="flex justify-center space-x-4">
                   <button
-                    className="hover:text-red-500 text-lg"
+                    className="hover:text-red-500 text-lg "
                     onClick={() => handleEliminar(usuario.id)}
                   >
                     <IconContext.Provider value={{ className: 'w-6 h-6' }}>

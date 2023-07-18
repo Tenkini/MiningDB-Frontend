@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import PopupConfirmacion from "../../components/PopupConfirmacion";
 function EditarCarga() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
@@ -13,8 +13,7 @@ function EditarCarga() {
   const [valueFechaInicio, setValueFechaInicio] = React.useState(null);
   const [valueFechaFin, setValueFechaFin] = React.useState(null);
   const [factorDeCarga, setFactorDeCarga] = useState("");
-
-
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -24,6 +23,30 @@ function EditarCarga() {
   const handleDialogClose = () => {
     setDialogOpen(false);
     setOverlayOpen(false);
+  };
+
+  const handleEditarCarga = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}editarcarga`;
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+          },
+        }
+      );
+      setDialogOpen(false);
+      setOverlayOpen(false);
+      setShowPopup(true);
+    } catch (error) {
+      setDialogOpen(false);
+      setOverlayOpen(false);
+      setShowPopup(true);
+    }
   };
 
   return (
@@ -162,7 +185,10 @@ function EditarCarga() {
                 />
               </div>
               <div>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
+                  onClick={handleEditarCarga}
+                >
                   Ingresar
                 </button>
               </div>
@@ -193,6 +219,13 @@ function EditarCarga() {
           height: 100%;
         }
       `}</style>
+
+      {showPopup && (
+        <PopupConfirmacion
+          message="¡Factor de carga cambiado correctamente!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 }

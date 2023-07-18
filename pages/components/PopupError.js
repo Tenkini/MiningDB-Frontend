@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const Popup = ({ message, onClose }) => {
+const PopupError = ({ message, onClose }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -22,10 +22,10 @@ const Popup = ({ message, onClose }) => {
   return (
     <div className={`fixed bottom-5 right-5 z-50 ${visible ? '' : 'hidden'}`}>
       <div className={`bg-MainLight dark:bg-MainDark rounded-lg p-4 shadow-md transform ${visible ? 'animate-jump-in' : 'animate-jump-out'}`}>
-        <p className='text-green-500'>{message}</p>
+        <p className='text-red-500'>{message}</p>
       </div>
     </div>
   );
 };
 
-export default Popup;
+export default PopupError;

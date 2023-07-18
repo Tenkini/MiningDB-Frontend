@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 import { FaRegEnvelope } from "react-icons/fa";
+import { getCookie } from 'cookies-next';
 
 function Resetpassword() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ function Resetpassword() {
             "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
             "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            "Authorization": getCookie("token"),
           },
         }
       );

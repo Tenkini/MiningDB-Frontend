@@ -2,12 +2,19 @@ import React, { useState, useContext } from "react";
 import Image from 'next/image'
 import { useTheme } from "next-themes";
 import CrearUsuario from "./CrearUsuario";
+import { useRouter } from "next/router";
 import PopupContext from "./PopupContext";
-
+import { deleteCookie } from "cookies-next";
 function TopNavbar({ showPopup }) {
     const { theme, setTheme } = useTheme();
     const [navbar, setNavbar] = useState(false);
     const { isPopupOpen, setPopupOpen } = useContext(PopupContext);
+    const router = useRouter();
+    const handlelogout = async () => {
+        deleteCookie("token");
+        deleteCookie("userType");
+        router.push("/../login");
+      };
     return (
         <div className={`pb-24 navmedium:pb-36 ${isPopupOpen ? "opacity-75" : ""}`}>
             <header className="bg-MainLight dark:bg-MainDark ">
@@ -19,7 +26,7 @@ function TopNavbar({ showPopup }) {
                 />
                 <ul className={`navbar navbreak:bg-transparent bg-MainLight text-TextLight dark:bg-MainDark dark:text-TextDark ${navbar ? 'open' : ''}`}>
                     <li className="hover:text-TextHover"><button><CrearUsuario>Añadir Usuario</CrearUsuario></button></li>
-                    <li className="hover:text-TextHover">Salir</li>
+                    <li className="hover:text-TextHover"><button onClick={handlelogout}>Salir</button></li>
                 </ul>
                 <div class="theme-changer">
                     <label role="button" for="checkbox" className="switch border-2 border-TextLight dark:border-TextDark">

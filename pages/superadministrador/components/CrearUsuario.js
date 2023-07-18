@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Autocomplete } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import React, { useState } from "react";
+import { Autocomplete } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import PopupConfirmacion from "../../components/PopupConfirmacion";
 
 function CrearUsuario() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState([]);
-  const [selectedName, setSelectedName] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
   const [selectedEmail, setSelectedEmail] = useState([]);
-  
-
+  const [showPopup, setShowPopup] = useState(false);
+  const [message, setMessage] = useState(false);
   const handleKeyPress = (event) => {
     const keyCode = event.keyCode || event.which;
     const keyValue = String.fromCharCode(keyCode);
@@ -31,7 +31,42 @@ function CrearUsuario() {
   const handleDialogClose = () => {
     setDialogOpen(false);
     setOverlayOpen(false);
+    setMessage(false);
+    setSelectedUser([]);
+    setSelectedEmail("");
   };
+
+  const handleCreateUser = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}createUser`;
+      const response = await axios.post(
+        url,
+        {
+          email: selectedEmail,
+          type: selectedUser.id,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      setDialogOpen(false);
+      setOverlayOpen(false);
+      setShowPopup(true);
+      console.log(response);
+    } catch (error) {
+      setMessage(true);
+    }
+  };
+
+  const options = [
+    { label: 'Visita', id: "guest" },
+    { label: 'Administrador', id: "admin" },
+  ];
 
   return (
     <div>
@@ -41,13 +76,19 @@ function CrearUsuario() {
         <div className="overlay">
           <div className="popup">
             <div className="bg-MainLight dark:bg-MainDark rounded p-8 max-w-lg">
-              <h2 className="text-2xl font-bold mb-1 text-TextHover">Nuevo Usuario</h2>
-
+              <h2 className="text-2xl font-bold mb-1 text-TextHover">
+                Nuevo Usuario
+              </h2>
+              {message && (
+                <p className="text-red-500">No se pudo crear el usuario.</p>
+              )}
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">Tipo de Usuario</label>
-                <Autocomplete className='bg-white'
-                  multiple
-                  options={['Opción 1', 'Opción 2', 'Opción 3']}
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">
+                  Tipo de Usuario
+                </label>
+                <Autocomplete
+                  className="bg-white"
+                  options={options}
                   value={selectedUser}
                   onChange={(event, value) => setSelectedUser(value)}
                   renderInput={(params) => (
@@ -56,25 +97,23 @@ function CrearUsuario() {
                       variant="outlined"
                       placeholder="Seleccione el Usuario"
                       sx={{
-                        width: '100%',
-                        '& .MuiOutlinedInput-input': {
-                          padding: '12px 16px',
-                          fontSize: '1rem',
-                          
+                        width: "100%",
+                        "& .MuiOutlinedInput-input": {
+                          padding: "12px 16px",
+                          fontSize: "1rem",
                         },
                       }}
                     />
                   )}
                   sx={{
-                    width: '100%',
-                    minWidth: '300px',
-                    minHeight: '48px',
+                    width: "100%",
+                    minWidth: "300px",
+                    minHeight: "48px",
                   }}
                 />
               </div>
 
-
-              <div className="mb-0">
+              {/*<div className="mb-0">
                 <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Nombre</label>
                 <TextField className='bg-white' 
                   value={selectedName}
@@ -89,34 +128,34 @@ function CrearUsuario() {
                   }}
                   
                 />
-              </div>
+              </div>*/}
 
               <div className="mb-0">
-                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">Correo</label>
-                <TextField className='bg-white' 
+                <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">
+                  Correo
+                </label>
+                <TextField
+                  className="bg-white"
                   value={selectedEmail}
-                  onChange={(event, value) => setSelectedEmail(value)}
-                  placeholder='Ingrese el Correo'
+                  onChange={(e) => setSelectedEmail(e.target.value)}
+                  placeholder="Ingrese el Correo"
                   variant="outlined"
                   sx={{
-                    width: '100%',
-                    minWidth: '300px',
-                    minHeight: '48px',
-                    
+                    width: "100%",
+                    minWidth: "300px",
+                    minHeight: "48px",
                   }}
-                  
                 />
               </div>
 
               <div>
-
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
-                onClick={handleDialogClose}
-              >
-                Ingresar
-              </button>
-              </div>     
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-2"
+                  onClick={handleCreateUser}
+                >
+                  Ingresar
+                </button>
+              </div>
               <button
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2"
                 onClick={handleDialogClose}
@@ -144,6 +183,12 @@ function CrearUsuario() {
           height: 100%;
         }
       `}</style>
+      {showPopup && (
+        <PopupConfirmacion
+          message="¡Usuario creado correctamente!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 }

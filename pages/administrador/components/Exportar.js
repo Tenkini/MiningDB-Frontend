@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import PopupConfirmacion from "../../components/PopupConfirmacion";
+import PopupError from "../../components/PopupError";
 function Exportar() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
@@ -12,7 +13,7 @@ function Exportar() {
   const [selectedName, setSelectedName] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [showPopup2, setShowPopup2] = useState(false);
   const handleKeyPress = (event) => {
     const keyCode = event.keyCode || event.which;
     const keyValue = String.fromCharCode(keyCode);
@@ -26,11 +27,14 @@ function Exportar() {
   const handleDialogOpen = () => {
     setDialogOpen(true);
     setOverlayOpen(true);
+    setShowPopup2(false);
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
     setOverlayOpen(false);
+    setShowPopup(false);
+    setShowPopup2(false);
   };
   const handleExport = async () => {
     try {
@@ -52,7 +56,7 @@ function Exportar() {
       setOverlayOpen(false);
       setShowPopup(true);
     } catch (error) {
-
+      setShowPopup2(true);
       setDialogOpen(false);
       setOverlayOpen(false);
     }
@@ -118,7 +122,15 @@ function Exportar() {
           onClose={() => setShowPopup(false)}
         />
       )}
+      {showPopup2 && (
+        <PopupError
+          message="¡No se ha podido generar el excel!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+      
     </div>
+    
   );
 }
 

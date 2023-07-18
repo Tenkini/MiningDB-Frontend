@@ -9,6 +9,8 @@ import PopupConfirmacion from "../../components/PopupConfirmacion";
 function CambiarContraseña() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [message2, setMessage2] = useState(false);
   const [selectedContraseaActual, setSelectedContraseaActual] = useState([]);
   const [selectedNuevaContraseña, setSelectedNuevaContraseña] = useState([]);
   const [selectedContraseñaConfirmada, setSelectedContraseñaConfirmada] =
@@ -31,8 +33,13 @@ function CambiarContraseña() {
   };
 
   const handleDialogClose = () => {
+    setMessage(false);
+    setMessage2(false);
     setDialogOpen(false);
     setOverlayOpen(false);
+    setSelectedContraseaActual("");
+    setSelectedNuevaContraseña("");
+    setSelectedContraseñaConfirmada("");
   };
 
   const handleChangePassword = async () => {
@@ -82,6 +89,9 @@ function CambiarContraseña() {
                 <label className="block font-bold mb-1 text-TextLight dark:text-TextDark">
                   Contraseña Actual
                 </label>
+                {message2 && (
+                  <p className="text-red-500">Contraseña incorrecta.</p>
+                )}
                 <TextField
                   className="bg-white"
                   value={selectedContraseaActual}
@@ -118,6 +128,11 @@ function CambiarContraseña() {
                 <label className="block font-bold mb-1 text-TextLight dark:text-TextDark ">
                   Confirmar Contraseña
                 </label>
+                {message && (
+                  <p className="text-red-500">
+                    Las contraseñas no son iguales.
+                  </p>
+                )}
                 <TextField
                   className="bg-white"
                   value={selectedContraseñaConfirmada}

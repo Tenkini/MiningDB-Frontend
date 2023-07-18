@@ -66,10 +66,7 @@ function CambiarContraseña() {
         setOverlayOpen(false);
         setShowPopup(true);
       } catch (error) {
-        setShowPopup(true);
         setMessage2(true);
-        setDialogOpen(false);
-        setOverlayOpen(false);
       }
     }
   };

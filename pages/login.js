@@ -19,9 +19,12 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [message, setMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handle = async () => {
+    setLoading(true);
+    
     if (remember) {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
@@ -45,6 +48,8 @@ function LoginPage() {
         const userType = response.data.user_type;
         setCookie("token", token);
         setCookie("userType", userType);
+
+        setTimeout(()=>setLoading(false),5000)
         if (userType === "guest") {
           router.push("/visita");
         } else if (userType === "admin") {
@@ -81,11 +86,12 @@ function LoginPage() {
         const userType = response.data.user_type;
         setCookie("token", token);
         setCookie("userType", userType);
+        setTimeout(()=>setLoading(false),5000)
         if (userType === "guest") {
           router.push("/visita");
         } else if (userType === "admin") {
           router.push("/administrador");
-        } else if (userType === "superadmin") {
+        } else if (userType === "root") {
           router.push("/superadministrador");
         }
         //console.log(response.data);
@@ -181,10 +187,18 @@ function LoginPage() {
                     </a>
                   </div>
                   <button
-                    className="hover:bg-TextHover border-2 border-TextHover text-TextHover rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue hover:text-white dark:text-TextDark"
+                    className={`hover:bg-TextHover border-2 border-TextHover text-TextHover rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue hover:text-white dark:text-TextDark
+                      
+                    }`}
                     onClick={handle}
                   >
-                    Iniciar Sesion
+                    {loading ? (
+                      <div class="contain">
+                        <div class="loader"></div>
+                      </div>
+                    ) : (
+                      "Iniciar Sesion"
+                    )}
                   </button>
                 </div>
               </div>

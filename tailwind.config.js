@@ -35,7 +35,7 @@ module.exports = {
       keyframes: {
         jumpIn: {
           '0%': { transform: 'scale(0)' },
-          '50%': { transform: 'scale(1.2)' },
+          '50%': { transform: 'scale(1.13)' },
           '100%': { transform: 'scale(1)' },
         },
         jumpOut: {
