@@ -1,4 +1,4 @@
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { AiOutlineDelete, AiOutlineLock, AiOutlineUser } from 'react-icons/ai';
 import CambiarTipoPopup from './CambiarTipoPopup';
@@ -71,7 +71,7 @@ const TablaUsuarios = () => {
 
   return (
     <div className="text-left bg-MainLight dark:bg-MainDark border border-separate border-spacing-0 border-BorderLight dark:border-BorderDark rounded-3xl mb-10 mx-4 shadow-[0px_0px_15px_rgba(114,114,113,0.3)]">
-      <table className="ml-2 text-TextLight dark:text-TextDark w-full">
+      <table className="text-TextLight dark:text-TextDark w-full">
         <thead>
           <tr>
             <th className="border-b border-custom-gray"></th>
@@ -84,7 +84,7 @@ const TablaUsuarios = () => {
         <tbody>
           {filasEjemplo.map((usuario) => (
             <tr key={usuario.id} className="h-16">
-              <td className="text-lg">{usuario.id}</td>
+              <td className="text-lg px-4">{usuario.id}</td>
               <td className="text-lg">{usuario.correo}</td>
               <td className="text-lg">{usuario.tipo}</td>
               <td className="text-lg">{usuario.permisos.join(', ')}</td>
