@@ -31,7 +31,22 @@ module.exports = {
       },
       transitionProperty: {
         'height': 'height',
-      }
+      },
+      keyframes: {
+        jumpIn: {
+          '0%': { transform: 'scale(0)' },
+          '50%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        jumpOut: {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(0)' },
+        },
+      },
+      animation: {
+        'jump-in': 'jumpIn 0.5s ease-in-out',
+        'jump-out': 'jumpOut 0.5s ease-in-out',
+      },
     },
   },
   plugins: [
