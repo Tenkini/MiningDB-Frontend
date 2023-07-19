@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Autocomplete } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import PopupConfirmacion from "../../components/PopupConfirmacion";
-function EditarCarga() {
+import { getCookie } from "cookies-next";
+import axios from "axios";
+import PopupError from "@/pages/components/PopupError";
+
+function EditarCarga({ datos, setDatos, fetchData }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [selectedOrigen, setSelectedOrigen] = useState([]);
@@ -14,7 +18,9 @@ function EditarCarga() {
   const [valueFechaFin, setValueFechaFin] = React.useState(null);
   const [factorDeCarga, setFactorDeCarga] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-
+  const [showError, setShowError] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [optionsOrigen, setOptionsOrigen] = useState([]);
   const handleDialogOpen = () => {
     setDialogOpen(true);
     setOverlayOpen(true);
@@ -23,31 +29,124 @@ function EditarCarga() {
   const handleDialogClose = () => {
     setDialogOpen(false);
     setOverlayOpen(false);
-  };
+    setSelectedOrigen([]);
+    setSelectedFlota([]);
+    setValueFechaInicio(null);
+    setValueFechaFin(null);
+    setFactorDeCarga("");
+    fetchData();
 
-  const handleEditarCarga = async () => {
+  };
+  const changeFlota = async (origen) => {
+    console.log(origen);
+    setSelectedOrigen(origen);
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}editarcarga`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}admin/getFlotas`;
       const response = await axios.post(
         url,
-        {},
+        {
+          origen: origen,
+        },
         {
           headers: {
             "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
             "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            Authorization: `${getCookie("token")}`,
+          },
+        }
+      );
+      setOptions(response.data.flotas);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditarCarga = async () => {
+    try {
+      console.log(selectedFlota);
+      const url = `${process.env.NEXT_PUBLIC_API_URL}admin/insertFactor`;
+      const response = await axios.post(
+        url,
+        {
+          flota: selectedFlota,
+          origen: selectedOrigen,
+          factor: factorDeCarga,
+          fecha_inicio: `${valueFechaInicio.$y}-${valueFechaInicio.$M}-${valueFechaInicio.$D}`,
+          fecha_fin: `${valueFechaFin.$y}-${valueFechaFin.$M}-${valueFechaFin.$D}`,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            Authorization: `${getCookie("token")}`,
           },
         }
       );
       setDialogOpen(false);
       setOverlayOpen(false);
       setShowPopup(true);
+      setSelectedOrigen([]);
+      setSelectedFlota([]);
+      setValueFechaInicio(null);
+      setValueFechaFin(null);
+      setFactorDeCarga("");
+      fetchData();
+      console.log(response.data);
     } catch (error) {
+      console.log(error);
       setDialogOpen(false);
       setOverlayOpen(false);
-      setShowPopup(true);
+      setShowError(true);
     }
   };
+
+  useEffect(() => {
+    const fetchOptionsFlotas = async () => {
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}admin/getFlotas`;
+        const response = await axios.post(
+          url,
+          {},
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: `${getCookie("token")}`,
+            },
+          }
+        );
+        setOptions(response.data.flotas);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchOptionsOrigen = async () => {
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}admin/getOrigenes`;
+        const response = await axios.post(
+          url,
+          {},
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: `${getCookie("token")}`,
+            },
+          }
+        );
+        setOptionsOrigen(response.data.nombres);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchOptionsOrigen();
+    //fetchOptionsFlotas(); // Llama a la función para obtener las opciones cuando el componente se monte
+  }, []);
 
   return (
     <div>
@@ -67,10 +166,9 @@ function EditarCarga() {
                 </label>
                 <Autocomplete
                   className="bg-white"
-                  multiple
-                  options={["Opción 1", "Opción 2", "Opción 3"]}
+                  options={optionsOrigen}
                   value={selectedOrigen}
-                  onChange={(event, value) => setSelectedOrigen(value)}
+                  onChange={(event, value) => changeFlota(value)} //(event, value) => setSelectedOrigen(value)
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -99,8 +197,7 @@ function EditarCarga() {
                 </label>
                 <Autocomplete
                   className="bg-white"
-                  multiple
-                  options={["Flota 1", "Flota 2", "Flota 3"]}
+                  options={options}
                   value={selectedFlota}
                   onChange={(event, value) => setSelectedFlota(value)}
                   renderInput={(params) => (
@@ -223,6 +320,12 @@ function EditarCarga() {
       {showPopup && (
         <PopupConfirmacion
           message="¡Factor de carga cambiado correctamente!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+      {showError && (
+        <PopupError
+          message="¡No se ha podido editor el factor de carga!"
           onClose={() => setShowPopup(false)}
         />
       )}

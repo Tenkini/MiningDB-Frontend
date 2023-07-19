@@ -21,7 +21,7 @@ function LoginPage() {
   const [message, setMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  /*if (hasCookie("remember")) {
+  if (hasCookie("remember")) {
     const remember = getCookie("remember");
     if (remember) {
       const userType = getCookie("userType")
@@ -33,7 +33,7 @@ function LoginPage() {
         router.push("/superadministrador");
       }
     }
-  }*/
+  }
 
   const speakMessage = (message) => {
     // Verificar si la API de síntesis de voz es compatible

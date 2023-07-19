@@ -1,135 +1,56 @@
 import TablaDesplegable from './components/TablaDesplegable';
 import TopNavbar from "./components/TopNavbar";
 import { useState, useEffect } from "react";
+import axios from 'axios';
+import { getCookie } from 'cookies-next';
 const MiPagina = () => {
 
-  const data = [
-    {
-      rajo: "rajo 1",
-      DiarioReal: 2000,
-      DiarioPlan: 3000,
-      KPI: 0.7,
-      SemanalISOReal: 2000,
-      SemanalISOPlan: 2000,
-      KPI2: 0.5,
-      SemanalReal: 5000,
-      SemanalPlan: 3000,
-      KPI3: 0.2,
-      MensualReal: 1000,
-      MensualPlan: 1000,
-      KPI4: 0.6,
-      AnualReal: 3000,
-      AnualPlan: 3000,
-      KPI5: 1,
-      fases: [
-        {
-          fase: "fase 1",
-          DiarioReal: 3000,
-          DiarioPlan: 4000,
-          KPI: 0.6,
-          SemanalISOReal: 2000,
-          SemanalISOPlan: 2000,
-          KPI2: 0.5,
-          SemanalReal: 5000,
-          SemanalPlan: 3000,
-          KPI3: 0.2,
-          MensualReal: 1000,
-          MensualPlan: 1000,
-          KPI4: 0.6,
-          AnualReal: 3000,
-          AnualPlan: 3000,
-          KPI5: 1,
-          flotas: [
-            {
-              flota: "flota 1",
-              DiarioReal: 1000,
-              DiarioPlan: 2000,
-              KPI: 0.5,
-              SemanalISOReal: 2000,
-              SemanalISOPlan: 2000,
-              KPI2: 0.5,
-              SemanalReal: 5000,
-              SemanalPlan: 3000,
-              KPI3: 0.2,
-              MensualReal: 1000,
-              MensualPlan: 1000,
-              KPI4: 0.6,
-              AnualReal: 3000,
-              AnualPlan: 3000,
-              KPI5: 1,
-            }
-          ]
-        }
-      ]
-    },
-    {
-      rajo: "rajo 2",
-      DiarioReal: 2000,
-      DiarioPlan: 3000,
-      KPI: 0.7,
-      SemanalISOReal: 2000,
-      SemanalISOPlan: 2000,
-      KPI2: 0.5,
-      SemanalReal: 5000,
-      SemanalPlan: 3000,
-      KPI3: 0.2,
-      MensualReal: 1000,
-      MensualPlan: 1000,
-      KPI4: 0.6,
-      AnualReal: 3000,
-      AnualPlan: 3000,
-      KPI5: 2,
-      fases: [
-        {
-          fase: "fase 1",
-          DiarioReal: 3000,
-          DiarioPlan: 4000,
-          KPI: 0.6,
-          SemanalISOReal: 2000,
-          SemanalISOPlan: 2000,
-          KPI2: 0.5,
-          SemanalReal: 5000,
-          SemanalPlan: 3000,
-          KPI3: 0.2,
-          MensualReal: 1000,
-          MensualPlan: 1000,
-          KPI4: 0.6,
-          AnualReal: 3000,
-          AnualPlan: 3000,
-          KPI5: 1,
-          flotas: [
-            {
-              flota: "flota 1",
-              DiarioReal: 1000,
-              DiarioPlan: 2000,
-              KPI: 0.9,
-              SemanalISOReal: 2000,
-              SemanalISOPlan: 2000,
-              KPI2: 0.5,
-              SemanalReal: 5000,
-              SemanalPlan: 3000,
-              KPI3: 0.2,
-              MensualReal: 1000,
-              MensualPlan: 1000,
-              KPI4: 0.6,
-              AnualReal: 3000,
-              AnualPlan: 3000,
-              KPI5: 1,
-            }
-          ]
-        }
-      ]
-    }
-  ];
+  const [datos, setDatos] = useState([]);
   const [mounted, setMounted] = useState(false)
   const [loged,setLoged] = useState(false)
   const login = ()=> setLoged(true)
   useEffect(()=> setMounted(true), [])
+
+  const fetchDataTable = async () =>{
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}users/getReport`;
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            Authorization: `${getCookie("token")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const fetchData = async () => {
+    try {
+      const data = await fetchDataTable();
+      setDatos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   if(!mounted) return null
   return (
     
     <div className='w-screen h-screen bg-BgLight dark:bg-BgDark'>
-      <div><TopNavbar/><TablaDesplegable data={data}/></div>
+      <div><TopNavbar datos={datos} setDatos={setDatos} fetchData={fetchData}/><TablaDesplegable datos={datos} setDatos={setDatos} fetchData={fetchData}/></div>
       
     </div>
     

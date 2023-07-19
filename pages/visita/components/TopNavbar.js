@@ -7,7 +7,7 @@ import CambiarContraseña from "./CambiarContraseña";
 import Exportar from "./Exportar";
 import { deleteCookie } from "cookies-next";
 
-function TopNavbar() {
+function TopNavbar({datos, setDatos,fetchData}) {
   const { theme, setTheme } = useTheme();
   const [navbar, setNavbar] = useState(false);
   const router = useRouter();

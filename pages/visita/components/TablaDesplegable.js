@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BiPlusCircle, BiMinusCircle} from "react-icons/bi";
 
-const TablaDesplegable = ({ data }) => {
+function TablaDesplegable({ datos, setDatos, fetchData }){
   const [expandedRows, setExpandedRows] = useState([]);
 
   const toggleRow = (index) => {
@@ -15,9 +15,19 @@ const TablaDesplegable = ({ data }) => {
     setExpandedRows(newExpandedRows);
   };
 
+  const renderRedCircle = () => (
+    <svg
+      className="w-4 h-4 fill-current text-red-500"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="12" cy="12" r="12" />
+    </svg>
+  );
+
   return (
     <>
-      {data.map((rajo, rajoIndex) => {
+      {datos.map((rajo, rajoIndex) => {
         const isRajoExpanded = expandedRows.includes(rajoIndex);
         const rowAnimationClass = isRajoExpanded ? 'row-expanded' : '';
         return (
@@ -57,23 +67,23 @@ const TablaDesplegable = ({ data }) => {
                     </button>
                   </td>
                   <td className="p-2">{rajo.rajo}</td>
-                  <td className='p-2'></td>
-                  <td className='p-2'></td>
+                  <td className="p-2"></td>
+                  <td className="p-2"></td>
                   <td className="p-2">{rajo.DiarioReal}</td>
                   <td className="p-2">{rajo.DiarioPlan}</td>
-                  <td className="p-2">{rajo.KPI}</td>
+                  <td className="p-2">{rajo.KPI === 0 ? renderRedCircle() : null}</td>
                   <td className="p-2">{rajo.SemanalISOReal}</td>
                   <td className="p-2">{rajo.SemanalISOPlan}</td>
-                  <td className="p-2">{rajo.KPI2}</td>
+                  <td className="p-2">{rajo.KPI2 === 0 ? renderRedCircle() : null}</td>
                   <td className="p-2">{rajo.SemanalReal}</td>
                   <td className="p-2">{rajo.SemanalPlan}</td>
-                  <td className="p-2">{rajo.KPI3}</td>
+                  <td className="p-2">{rajo.KPI3 === 0 ? renderRedCircle() : null}</td>
                   <td className="p-2">{rajo.MensualReal}</td>
                   <td className="p-2">{rajo.MensualPlan}</td>
-                  <td className="p-2">{rajo.KPI4}</td>
+                  <td className="p-2">{rajo.KPI4 === 0 ? renderRedCircle() : null}</td>
                   <td className="p-2">{rajo.AnualReal}</td>
                   <td className="p-2">{rajo.AnualPlan}</td>
-                  <td className="p-2">{rajo.KPI5}</td>
+                  <td className="p-2">{rajo.KPI5 === 0 ? renderRedCircle() : null}</td>
                 </tr>
                 {isRajoExpanded &&
                   rajo.fases.map((fase, faseIndex) => {
@@ -99,19 +109,19 @@ const TablaDesplegable = ({ data }) => {
                           <td className='border-t border-custom-gray'></td>
                           <td className="p-2 border-t border-custom-gray">{fase.DiarioReal}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.DiarioPlan}</td>
-                          <td className="p-2 border-t border-custom-gray">{fase.KPI}</td>
+                          <td className="p-2 border-t border-custom-gray">{fase.KPI === 0 ? renderRedCircle() : null}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.SemanalISOReal}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.SemanalISOPlan}</td>
-                          <td className="p-2 border-t border-custom-gray">{fase.KPI2}</td>
+                          <td className="p-2 border-t border-custom-gray">{fase.KPI2 === 0 ? renderRedCircle() : null}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.SemanalReal}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.SemanalPlan}</td>
-                          <td className="p-2 border-t border-custom-gray">{fase.KPI3}</td>
+                          <td className="p-2 border-t border-custom-gray">{fase.KPI3 === 0 ? renderRedCircle() : null}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.MensualReal}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.MensualPlan}</td>
-                          <td className="p-2 border-t border-custom-gray">{fase.KPI4}</td>
+                          <td className="p-2 border-t border-custom-gray">{fase.KPI4 === 0 ? renderRedCircle() : null}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.AnualReal}</td>
                           <td className="p-2 border-t border-custom-gray">{fase.AnualPlan}</td>
-                          <td className="p-2 border-t border-custom-gray">{fase.KPI5}</td>
+                          <td className="p-2 border-t border-custom-gray">{fase.KPI5 === 0 ? renderRedCircle() : null}</td>
                         </tr>
                         {isFaseExpanded &&
                           fase.flotas.map((flota, flotaIndex) => (

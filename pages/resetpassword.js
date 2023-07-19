@@ -15,7 +15,7 @@ function Resetpassword() {
 
   const handle = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}generatePassword`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}login/generatePassword`;
       const response = await axios.post(
         url,
         {
@@ -77,7 +77,7 @@ function Resetpassword() {
                 </h2>
                 <div className="border-2 w-10 border-blue inline-block mb-2"></div>
                 {
-                  <p className="text-red-500">{message}</p>
+                  <p className="text-green-500">{message}</p>
                 }
                 <div className="flex flex-col items-center ">
                   <div className="bg-gray-100 w-full sm:w-64 p-2 flex items-center mb-3 rounded-full">

@@ -9,7 +9,7 @@ import CambiarContraseña from "./CambiarContraseña";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/router";
 
-function TopNavbar() {
+function TopNavbar({datos, setDatos,fetchData}) {
   const { theme, setTheme } = useTheme();
   const [navbar, setNavbar] = useState(false);
   const [enabledSwitch, setEnabledSwitch] = useState(false);
@@ -40,7 +40,7 @@ function TopNavbar() {
           <li className="hover:text-TextHover"> Reportes</li>
           <li className="hover:text-TextHover">
             <button>
-              <EditarCarga>Editar Carga</EditarCarga>
+              <EditarCarga datos={datos} setDatos={setDatos} fetchData={fetchData}>Editar Carga</EditarCarga>
             </button>
           </li>
           <li className="hover:text-TextHover">
@@ -48,11 +48,11 @@ function TopNavbar() {
               <CrearUsuario>Crear Usuario</CrearUsuario>
             </button>
           </li>
-          <li className="hover:text-TextHover">
+          {/*<li className="hover:text-TextHover">
             <button>
               <Exportar>Exportar</Exportar>
             </button>
-          </li>
+          </li>*/}
           <li className="hover:text-TextHover">
             <button>
               <CambiarContraseña>Cambiar Contraseña</CambiarContraseña>
