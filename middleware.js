@@ -37,6 +37,7 @@ export async function middleware(request) {
               "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
               "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
               "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: token,
             },
           }
         );
@@ -63,6 +64,7 @@ export async function middleware(request) {
               "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
               "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
               "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: token,
             },
           }
         );
@@ -91,6 +93,7 @@ export async function middleware(request) {
               "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
               "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
               "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: token,
             },
           }
         );
