@@ -78,7 +78,7 @@ function Exportar() {
                   minHeight: "48px",
                 }}
               >
-                Si
+                  Confirmar
               </button>
               <button
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2"
@@ -89,7 +89,7 @@ function Exportar() {
                   minHeight: "48px",
                 }}
               >
-                No
+                Cancelar
               </button>
             </div>
           </div>

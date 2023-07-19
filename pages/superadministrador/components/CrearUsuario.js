@@ -5,11 +5,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import PopupConfirmacion from "../../components/PopupConfirmacion";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 
-function CrearUsuario() {
+function CrearUsuario({ filasEjemplo, setFilasEjemplo, fetchData }) {
+  const options = [
+    { label: "Visita", id: "guest" },
+    { label: "Administrador", id: "admin" },
+  ];
   const [dialogOpen, setDialogOpen] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedUser, setSelectedUser] = useState(options[0]);
   const [selectedEmail, setSelectedEmail] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState(false);
@@ -32,13 +38,13 @@ function CrearUsuario() {
     setDialogOpen(false);
     setOverlayOpen(false);
     setMessage(false);
-    setSelectedUser([]);
+    setSelectedUser(options[0]);
     setSelectedEmail("");
   };
 
   const handleCreateUser = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}createUser`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}root/createUser`;
       const response = await axios.post(
         url,
         {
@@ -50,23 +56,22 @@ function CrearUsuario() {
             "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
             "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
-            Authorization: `Bearer ${getCookie("token")}`,
+            Authorization: `${getCookie("token")}`,
           },
         }
       );
       setDialogOpen(false);
       setOverlayOpen(false);
       setShowPopup(true);
+      setSelectedUser(options[0]);
+      setSelectedEmail("");
+      fetchData();
       console.log(response);
     } catch (error) {
+      console.log(error);
       setMessage(true);
     }
   };
-
-  const options = [
-    { label: 'Visita', id: "guest" },
-    { label: 'Administrador', id: "admin" },
-  ];
 
   return (
     <div>

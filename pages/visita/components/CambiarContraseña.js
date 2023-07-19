@@ -5,6 +5,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import PopupConfirmacion from "../../components/PopupConfirmacion";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 
 function CambiarContraseña() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -47,7 +49,7 @@ function CambiarContraseña() {
       setMessage(true);
     } else {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}changePassword`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}login/changePassword`;
         const response = await axios.post(
           url,
           {
@@ -59,6 +61,7 @@ function CambiarContraseña() {
               "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
               "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
               "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: `${getCookie("token")}`,
             },
           }
         );
@@ -66,6 +69,7 @@ function CambiarContraseña() {
         setOverlayOpen(false);
         setShowPopup(true);
       } catch (error) {
+        console.log(error);
         setMessage2(true);
       }
     }
@@ -110,6 +114,7 @@ function CambiarContraseña() {
                 </label>
                 <TextField
                   className="bg-white"
+                  type="password"
                   value={selectedNuevaContraseña}
                   onChange={(e) => setSelectedNuevaContraseña(e.target.value)}
                   placeholder="Ingrese la Contraseña Nueva"
@@ -133,6 +138,7 @@ function CambiarContraseña() {
                 )}
                 <TextField
                   className="bg-white"
+                  type="password"
                   value={selectedContraseñaConfirmada}
                   onChange={(e) =>
                     setSelectedContraseñaConfirmada(e.target.value)

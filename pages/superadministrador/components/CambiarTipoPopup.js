@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
-
+import React, { useState } from "react";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
-  const [nuevoTipo, setNuevoTipo] = useState('');
-  const [error, setError] = useState('');
+  const [nuevoTipo, setNuevoTipo] = useState("");
+  const [error, setError] = useState("");
 
-  const tiposUsuario = ['admin', 'visita'];
+  const tiposUsuario = ["Administrador", "Visita"];
 
   const handleTipoChange = (event) => {
     setNuevoTipo(event.target.value);
-    setError('');
+    setError("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(nuevoTipo);
+    console.log(usuario.tipo);
     if (nuevoTipo === usuario.tipo) {
-      setError('El tipo seleccionado es el mismo que el actual.');
-    } else if (nuevoTipo.trim() === '') {
-      setError('Por favor, selecciona un tipo de usuario válido.');
+      setError("El tipo seleccionado es el mismo que el actual.");
+    } else if (nuevoTipo.trim() === "") {
+      setError("Por favor, selecciona un tipo de usuario válido.");
     } else {
-      onChangeTipo(nuevoTipo);
+      
+      try {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}root/changeUserType`;
+        const response = await axios.post(
+          url,
+          {
+            email: usuario.correo,
+            type: nuevoTipo,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+              Authorization: `${getCookie("token")}`,
+            },
+          }
+        );
+        onChangeTipo(nuevoTipo);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -28,7 +52,9 @@ const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
         <h2 className="text-lg font-semibold mb-4">Cambiar tipo de usuario</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Nuevo tipo:</label>
+            <label className="block text-sm font-medium mb-2">
+              Nuevo tipo:
+            </label>
             <select
               value={nuevoTipo}
               onChange={handleTipoChange}

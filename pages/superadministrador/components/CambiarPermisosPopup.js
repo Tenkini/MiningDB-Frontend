@@ -44,7 +44,6 @@ const CambiarPermisosPopup = ({
     console.log(rajosSeleccionados);
     try {
       // Agregar los nuevos permisos llamando a la función addPermission de la API
-      // Agregar los nuevos permisos llamando a la función addPermission de la API
       await Promise.all(
         rajoxPermisos.map(async (rajo) => {
           console.log(permisosSeleccionados[rajo]);
@@ -60,6 +59,16 @@ const CambiarPermisosPopup = ({
         Rajo: rajo.Rajo,
         Permiso: permisosSeleccionados[rajo.Rajo] ? "True" : "False",
       }));
+      // Asegurarnos de que usuario.permisos sea un array antes de usar some()
+      const hasPermisos =
+        Array.isArray(usuario.permisos) &&
+        usuario.permisos.some((rajo) => rajo.Permiso === "True");
+      const newPermisosText = hasPermisos
+        ? usuario.permisos
+            .filter((rajo) => rajo.Permiso === "True")
+            .map((rajo) => rajo.Rajo)
+            .join(", ")
+        : "Sin permisos";
       console.log(updatedPermisos);
       onChangePermisos(permisosSeleccionados)
         .then(() => {
@@ -76,6 +85,8 @@ const CambiarPermisosPopup = ({
 
   // Llamada a la función addPermission de la API para agregar un permiso
   const addPermission = async (correo, rajo) => {
+    console.log("correo:", correo);
+    console.log(rajo);
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}root/addPermission`;
       const response = await axios.post(
@@ -93,6 +104,7 @@ const CambiarPermisosPopup = ({
           },
         }
       );
+      console.log(response.data);
       console.log("traspasa await");
     } catch (error) {
       console.log("error");
@@ -111,23 +123,23 @@ const CambiarPermisosPopup = ({
         <h2 className="text-lg font-semibold mb-4 text-TextLight dark:text-TextDark">
           Cambiar permisos del usuario
         </h2>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Permisos:</label>
-          <div>
-            {rajoxPermisos.map((rajo) => (
-              <label key={rajo} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  value={rajo}
-                  checked={permisosSeleccionados[rajo]}
-                  onChange={handlePermisoChange}
-                  className="form-checkbox"
-                />
-                <span>{rajo}</span>
-              </label>
-            ))}
-            {/*<label className="flex items-center space-x-2">
+        <form>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Permisos:</label>
+            <div>
+              {rajoxPermisos.map((rajo) => (
+                <label key={rajo} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    value={rajo}
+                    checked={permisosSeleccionados[rajo]}
+                    onChange={handlePermisoChange}
+                    className="form-checkbox"
+                  />
+                  <span>{rajo}</span>
+                </label>
+              ))}
+              {/*<label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   value="rajo 1"
@@ -167,24 +179,25 @@ const CambiarPermisosPopup = ({
                 />
                 <span>Rajo 4</span>
               </label>*/}
+            </div>
           </div>
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="text-sm font-medium text-gray-500 mr-4"
-            onClick={onClose}
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSubmit}
-          >
-            Guardar
-          </button>
-        </div>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="text-sm font-medium text-gray-500 mr-4"
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSubmit}
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

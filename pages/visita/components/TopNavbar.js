@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 import CambiarContraseña from "./CambiarContraseña";
 import Exportar from "./Exportar";
+import { deleteCookie } from "cookies-next";
 
 function TopNavbar() {
   const { theme, setTheme } = useTheme();
@@ -44,7 +45,7 @@ function TopNavbar() {
         <div class="theme-changer">
           <label
             role="button"
-            for="checkbox"
+            htmlfor="checkbox"
             className="switch border-2 border-TextLight dark:border-TextDark"
           >
             <input

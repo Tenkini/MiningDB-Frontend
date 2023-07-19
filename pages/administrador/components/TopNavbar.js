@@ -65,7 +65,7 @@ function TopNavbar() {
         <div class="theme-changer">
           <label
             role="button"
-            for="checkbox"
+            htmlFor="checkbox"
             className="switch border-2 border-TextLight dark:border-TextDark"
           >
             <input

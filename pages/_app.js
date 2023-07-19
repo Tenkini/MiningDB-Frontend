@@ -18,6 +18,8 @@ export default function App({ Component, pageProps, router }) {
       }}
     >
       <ThemeProvider attribute="class" enableSystem={true}>
+          <title>Reportes Mineros</title>
+        
         <Component {...pageProps} />
       </ThemeProvider>
     </motion.div>

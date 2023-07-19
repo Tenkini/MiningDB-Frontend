@@ -24,7 +24,7 @@ function LoginPage() {
 
   const speakMessage = (message) => {
     // Verificar si la API de síntesis de voz es compatible
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       // Crear un nuevo objeto SpeechSynthesisUtterance
       const utterance = new SpeechSynthesisUtterance(message);
 
@@ -33,91 +33,51 @@ function LoginPage() {
     } else {
       // La API de síntesis de voz no es compatible con este navegador.
       // Puedes mostrar un mensaje de error o proporcionar otra retroalimentación.
-      console.log('La API de síntesis de voz no es compatible con este navegador.');
+      console.log(
+        "La API de síntesis de voz no es compatible con este navegador."
+      );
     }
   };
 
   const handle = async () => {
     setLoading(true);
-    
-    if (remember) {
-      try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
-        const response = await axios.post(
-          url,
-          {
-            email: email,
-            password: password,
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
+      const response = await axios.post(
+        url,
+        {
+          email: email,
+          password: password,
+          remember: remember,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
           },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
-              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
-              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
-            },
-          }
-        );
-        // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
-        // Obtén el token de la respuesta del servidor
-        const token = response.data.token;
-        const userType = response.data.user_type;
-        setCookie("token", token);
-        setCookie("userType", userType);
-       
-        
-        setTimeout(()=>setLoading(false),5000)
-        if (userType === "guest") {
-          router.push("/visita");
-        } else if (userType === "admin") {
-          router.push("/administrador");
-        } else if (userType === "superadmin") {
-          router.push("/superadministrador");
         }
-        //console.log(response.data);
-      } catch (error) {
-        // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
-        console.log("Usuario invalido");
-        setMessage(true);
+      );
+      // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
+      // Obtén el token de la respuesta del servidor
+      const token = response.data.token;
+      const userType = response.data.user_type;
+      setCookie("token", token);
+      setCookie("userType", userType);
+      setTimeout(() => setLoading(false), 5000);
+      if (userType === "guest") {
+        router.push("/visita");
+      } else if (userType === "admin") {
+        router.push("/administrador");
+      } else if (userType === "root") {
+        router.push("/superadministrador");
       }
-    } else {
-      try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}login`;
-        const response = await axios.post(
-          url,
-          {
-            email: email,
-            password: password,
-          },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
-              "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
-              "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
-            },
-          }
-        );
-        // Maneja la respuesta del servidor, por ejemplo, guarda el token de sesión en el almacenamiento local o redirecciona a otra página.
-        // Obtén el token de la respuesta del servidor
-        const token = response.data.token;
-        const userType = response.data.user_type;
-        setCookie("token", token);
-        setCookie("userType", userType);
-        setTimeout(()=>setLoading(false),5000)
-        if (userType === "guest") {
-          router.push("/visita");
-        } else if (userType === "admin") {
-          router.push("/administrador");
-        } else if (userType === "root") {
-          router.push("/superadministrador");
-        }
-        const message = "¡Bienvenido!";
-        speakMessage(message);
-        //console.log(response.data);
-      } catch (error) {
-        // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
-        console.log("Usuario invalido");
-        setMessage(true);
-      }
+      console.log(response.data);
+    } catch (error) {
+      setLoading(false);
+      // Maneja los errores, por ejemplo, muestra un mensaje de error al usuario.
+      console.log("Usuario invalido");
+      setMessage(true);
     }
   };
   return (

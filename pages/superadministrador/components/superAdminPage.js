@@ -6,13 +6,20 @@ import CambiarPermisosPopup from "./CambiarPermisosPopup";
 import PopupContext from "./PopupContext";
 import { getCookie } from "cookies-next";
 import axios from "axios";
-const TablaUsuarios = () => {
-  const [filasEjemplo, setFilasEjemplo] = useState([]);
+import PopupConfirmacion2 from "./PopupConfirmacion";
+import PopupConfirmacion from "../../components/PopupConfirmacion";
+import PopupError from "../../components/PopupError";
+
+const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
+  //const [filasEjemplo, setFilasEjemplo] = useState([]);
 
   const [mostrarTipoPopup, setMostrarTipoPopup] = useState(false);
   const [mostrarPermisosPopup, setMostrarPermisosPopup] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const { isPopupOpen, setPopupOpen } = useContext(PopupContext);
+  const [popupOpen, setPopupOpen2] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -22,7 +29,7 @@ const TablaUsuarios = () => {
     setPopupOpen(false);
   };
 
-  const handleEliminar = (id) => {
+  /*const handleEliminar = (id) => {
     const confirmacion = window.confirm(
       "¿Estás seguro de que quieres eliminar este usuario?"
     );
@@ -31,6 +38,51 @@ const TablaUsuarios = () => {
         prevFilas.filter((usuario) => usuario.id !== id)
       );
     }
+  };*/
+
+  const handleEliminar = (id) => {
+    setUsuarioSeleccionado(id);
+    setPopupOpen(true);
+    setPopupOpen2(true);
+  };
+
+  const handleConfirmEliminar = async () => {
+    console.log(usuarioSeleccionado);
+    setFilasEjemplo((prevFilas) =>
+      prevFilas.filter((usuario) => usuario.id !== usuarioSeleccionado)
+    );
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}root/deleteUser`;
+      const response = await axios.post(
+        url,
+        {
+          email: usuarioSeleccionado,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos
+            Authorization: `${getCookie("token")}`,
+          },
+        }
+      );
+      setUsuarioSeleccionado(null);
+      setPopupOpen2(false);
+      setPopupOpen(false);
+      setShowPopup(true);
+    } catch (error) {
+      setShowError(true);
+      setPopupOpen(false);
+      setPopupOpen2(false);
+      console.log(error);
+    }
+  };
+
+  const handleCancelEliminar = () => {
+    setUsuarioSeleccionado(null);
+    setPopupOpen2(false);
+    setPopupOpen(false);
   };
 
   const handleCambiarPermisos = (id) => {
@@ -125,6 +177,7 @@ const TablaUsuarios = () => {
       return usersWithPermissions; // Devuelve los usuarios con sus respectivos permisos
     } catch (error) {
       console.error(error);
+      
       throw error; // Lanza el error para que pueda ser capturado por el componente principal
     }
   };
@@ -174,7 +227,8 @@ const TablaUsuarios = () => {
               </td>
 
               <td className="text-lg border-t border-custom-gray">
-                {usuario.permisos.some((rajo) => rajo.Permiso === "True")
+                {usuario.permisos &&
+                usuario.permisos.some((rajo) => rajo.Permiso === "True")
                   ? usuario.permisos
                       .filter((rajo) => rajo.Permiso === "True")
                       .map((rajo) => rajo.Rajo)
@@ -185,7 +239,7 @@ const TablaUsuarios = () => {
                 <div className="flex justify-center space-x-4">
                   <button
                     className="hover:text-red-500 text-lg "
-                    onClick={() => handleEliminar(usuario.id)}
+                    onClick={() => handleEliminar(usuario.correo)}
                   >
                     <IconContext.Provider value={{ className: "w-6 h-6" }}>
                       <AiOutlineDelete />
@@ -230,6 +284,29 @@ const TablaUsuarios = () => {
           closeAndRefresh={closeAndRefresh} // Pasar la función closeAndRefresh al componente CambiarPermisosPopup
         />
       )}
+
+      {popupOpen && (
+        <PopupConfirmacion2
+          message="¿Estás seguro de que quieres eliminar este usuario?"
+          onConfirm={handleConfirmEliminar}
+          onCancel={handleCancelEliminar}
+        />
+      )}
+
+      {showPopup && (
+        <PopupConfirmacion
+          message="¡Usuario eliminado correctamente!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+
+{showError && (
+        <PopupError
+          message="¡No se ha podido eliminar el usuario!"
+          onClose={() => setShowError(false)}
+        />
+      )}
+      
     </div>
   );
 };

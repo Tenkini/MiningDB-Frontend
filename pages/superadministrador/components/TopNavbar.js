@@ -5,7 +5,7 @@ import CrearUsuario from "./CrearUsuario";
 import { useRouter } from "next/router";
 import PopupContext from "./PopupContext";
 import { deleteCookie } from "cookies-next";
-function TopNavbar({ showPopup }) {
+function TopNavbar({ filasEjemplo, setFilasEjemplo ,fetchData }) {
     const { theme, setTheme } = useTheme();
     const [navbar, setNavbar] = useState(false);
     const { isPopupOpen, setPopupOpen } = useContext(PopupContext);
@@ -25,11 +25,11 @@ function TopNavbar({ showPopup }) {
                     alt="Logo Antofagasta Minerals"
                 />
                 <ul className={`navbar navbreak:bg-transparent bg-MainLight text-TextLight dark:bg-MainDark dark:text-TextDark ${navbar ? 'open' : ''}`}>
-                    <li className="hover:text-TextHover"><button><CrearUsuario>Añadir Usuario</CrearUsuario></button></li>
+                    <li className="hover:text-TextHover"><button><CrearUsuario filasEjemplo={filasEjemplo} setFilasEjemplo={setFilasEjemplo} fetchData={fetchData}>Añadir Usuario</CrearUsuario></button></li>
                     <li className="hover:text-TextHover"><button onClick={handlelogout}>Salir</button></li>
                 </ul>
                 <div class="theme-changer">
-                    <label role="button" for="checkbox" className="switch border-2 border-TextLight dark:border-TextDark">
+                    <label role="button" htmlfor="checkbox" className="switch border-2 border-TextLight dark:border-TextDark">
 
                         <input type="checkbox" id="checkbox" checked={theme === 'light' ? false : true} onChange={() => setTheme(theme === 'light' ? 'dark' : 'light')} />
                         <span className="switch__ball bg-TextLight dark:bg-TextDark"></span>
