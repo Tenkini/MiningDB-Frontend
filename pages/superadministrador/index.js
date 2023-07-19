@@ -13,7 +13,7 @@ const MiPagina = () => {
   useEffect(() => setMounted(true), []);
    
 
-  const fetchData = async () => {
+  const userData = async () => {
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}root/getUsers`;
       const response = await axios.post(
@@ -29,16 +29,55 @@ const MiPagina = () => {
         }
       );
 
-      // ... (procesar la respuesta y actualizar el estado filasEjemplo)
-      console.log(response.data)
-      setFilasEjemplo(response.data);
+      const usersWithPermissions = await Promise.all(
+        response.data.map(async (user) => {
+          const permissionsUrl = `${process.env.NEXT_PUBLIC_API_URL}root/getPermissions`;
+          const permissionsResponse = await axios.post(
+            permissionsUrl,
+            {
+              email: user.correo,
+            },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*", // Permitir cualquier origen (esto es innecesario en el cliente)
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos (esto es innecesario en el cliente)
+                "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos (esto es innecesario en el cliente)
+                Authorization: `${getCookie("token")}`,
+              },
+            }
+          );
+
+          return {
+            ...user,
+            permisos: permissionsResponse.data,
+          };
+        })
+      );
+      console.log("esta funcion");
+      return usersWithPermissions; // Devuelve los usuarios con sus respectivos permisos
+    } catch (error) {
+      console.error(error);
+
+      throw error; // Lanza el error para que pueda ser capturado por el componente principal
+    }
+  };
+
+  /*useEffect(() => {
+    const data = await fetchData(); // Obtener los datos iniciales al montar el componente
+    setFilasEjemplo(data); 
+  }, []);*/
+
+  const fetchData = async () => {
+    try {
+      const data = await userData();
+      setFilasEjemplo(data);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchData(); // Obtener los datos iniciales al montar el componente
+    fetchData();
   }, []);
 
   if (!mounted){

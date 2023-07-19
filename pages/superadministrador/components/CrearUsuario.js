@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -40,9 +40,27 @@ function CrearUsuario({ filasEjemplo, setFilasEjemplo, fetchData }) {
     setMessage(false);
     setSelectedUser(options[0]);
     setSelectedEmail("");
+
   };
 
   const handleCreateUser = async () => {
+    try {
+      await handleCreateUserRequest();
+      setDialogOpen(false);
+      setOverlayOpen(false);
+      setShowPopup(true);
+      setSelectedUser(options[0]);
+      setSelectedEmail("");
+      setMessage(false);
+      fetchData();
+  
+    } catch (error) {
+      console.log(error);
+      setMessage(true);
+    }
+  };
+
+  const handleCreateUserRequest = async () => {
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}root/createUser`;
       const response = await axios.post(
@@ -60,18 +78,11 @@ function CrearUsuario({ filasEjemplo, setFilasEjemplo, fetchData }) {
           },
         }
       );
-      setDialogOpen(false);
-      setOverlayOpen(false);
-      setShowPopup(true);
-      setSelectedUser(options[0]);
-      setSelectedEmail("");
-      fetchData();
-      console.log(response);
     } catch (error) {
       console.log(error);
       setMessage(true);
     }
-  };
+  }
 
   return (
     <div>

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
-import { setCookie } from "cookies-next";
+import { setCookie,hasCookie,getCookie } from "cookies-next";
 const inter = Inter({ subsets: ["latin"] });
 import {
   FaFacebookF,
@@ -21,6 +21,19 @@ function LoginPage() {
   const [message, setMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  /*if (hasCookie("remember")) {
+    const remember = getCookie("remember");
+    if (remember) {
+      const userType = getCookie("userType")
+      if (userType === "guest") {
+        router.push("/visita");
+      } else if (userType === "admin") {
+        router.push("/administrador");
+      } else if (userType === "root") {
+        router.push("/superadministrador");
+      }
+    }
+  }*/
 
   const speakMessage = (message) => {
     // Verificar si la API de síntesis de voz es compatible
@@ -64,6 +77,9 @@ function LoginPage() {
       const userType = response.data.user_type;
       setCookie("token", token);
       setCookie("userType", userType);
+      if(remember){
+        setCookie("remember", remember);
+      }
       setTimeout(() => setLoading(false), 5000);
       if (userType === "guest") {
         router.push("/visita");

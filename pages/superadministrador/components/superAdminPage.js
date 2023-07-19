@@ -20,7 +20,7 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
   const [popupOpen, setPopupOpen2] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showError, setShowError] = useState(false);
-
+  const [showPopupTipo, setShowPopupTipo] = useState(false);
   const openPopup = () => {
     setPopupOpen(true);
   };
@@ -52,6 +52,23 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
       prevFilas.filter((usuario) => usuario.id !== usuarioSeleccionado)
     );
     try {
+      await handleEliminateteUserRequest();
+
+      setUsuarioSeleccionado(null);
+      setPopupOpen2(false);
+      setPopupOpen(false);
+      setShowPopup(true);
+      fetchData()
+    } catch (error) {
+      setShowError(true);
+      setPopupOpen(false);
+      setPopupOpen2(false);
+      console.log(error);
+    }
+  };
+
+  const handleEliminateteUserRequest = async () => {
+    try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}root/deleteUser`;
       const response = await axios.post(
         url,
@@ -67,17 +84,11 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
           },
         }
       );
-      setUsuarioSeleccionado(null);
-      setPopupOpen2(false);
-      setPopupOpen(false);
-      setShowPopup(true);
     } catch (error) {
-      setShowError(true);
-      setPopupOpen(false);
-      setPopupOpen2(false);
       console.log(error);
     }
-  };
+  }
+
 
   const handleCancelEliminar = () => {
     setUsuarioSeleccionado(null);
@@ -109,6 +120,8 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
           : usuario
       )
     );
+    setShowPopupTipo(true);
+    setPopupOpen(false);
     setMostrarTipoPopup(false);
     setUsuarioSeleccionado(null);
   };
@@ -173,11 +186,12 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
           };
         })
       );
+     
 
       return usersWithPermissions; // Devuelve los usuarios con sus respectivos permisos
     } catch (error) {
       console.error(error);
-      
+
       throw error; // Lanza el error para que pueda ser capturado por el componente principal
     }
   };
@@ -300,13 +314,19 @@ const TablaUsuarios = ({ filasEjemplo, setFilasEjemplo, fetchData }) => {
         />
       )}
 
-{showError && (
+      {showError && (
         <PopupError
           message="¡No se ha podido eliminar el usuario!"
           onClose={() => setShowError(false)}
         />
       )}
-      
+
+      {showPopupTipo && (
+        <PopupConfirmacion
+          message="¡El tipo de usuario se ha cambiado correctamente!"
+          onClose={() => setShowPopupTipo(false)}
+        />
+      )}
     </div>
   );
 };

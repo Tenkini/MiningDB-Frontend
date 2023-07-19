@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import PopupConfirmacion from "../../components/PopupConfirmacion";
 const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
-  const [nuevoTipo, setNuevoTipo] = useState("");
+  const [nuevoTipo, setNuevoTipo] = useState({});
+  const [nuevoTipo2, setNuevoTipo2] = useState("");
   const [error, setError] = useState("");
-
-  const tiposUsuario = ["Administrador", "Visita"];
+  const [showPopup, setShowPopup] = useState(false);
+  const tiposUsuario = [{label: "Administrador", id: "admin"}, {label: "Visita", id: "guest"}];
 
   const handleTipoChange = (event) => {
+    setNuevoTipo2(event.target.value === "guest" ? "Visita" : event.target.value === "admin" ? "Administrador" : event.target.value);
     setNuevoTipo(event.target.value);
     setError("");
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     console.log(nuevoTipo);
-    console.log(usuario.tipo);
-    if (nuevoTipo === usuario.tipo) {
+    console.log(nuevoTipo2);
+    if (nuevoTipo2 === usuario.tipo) {
       setError("El tipo seleccionado es el mismo que el actual.");
-    } else if (nuevoTipo.trim() === "") {
+    } else if (nuevoTipo2.trim() === "") {
       setError("Por favor, selecciona un tipo de usuario válido.");
     } else {
       
@@ -39,7 +41,14 @@ const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
             },
           }
         );
-        onChangeTipo(nuevoTipo);
+        setShowPopup(true);
+        if(nuevoTipo == "admin"){
+          onChangeTipo("Administrador");
+        }
+        else if(nuevoTipo == "guest"){
+          onChangeTipo("Visita");
+        }
+        
       } catch (error) {
         console.log(error);
       }
@@ -50,7 +59,6 @@ const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
     <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-75">
       <div className="bg-MainLight dark:bg-MainDark p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-4">Cambiar tipo de usuario</h2>
-        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">
               Nuevo tipo:
@@ -62,30 +70,37 @@ const CambiarTipoPopup = ({ usuario, onClose, onChangeTipo }) => {
             >
               <option value="">Selecciona un tipo de usuario</option>
               {tiposUsuario.map((tipo) => (
-                <option value={tipo} key={tipo}>
-                  {tipo}
+                <option value={tipo.id} key={tipo.id}>
+                  {tipo.label}
                 </option>
               ))}
             </select>
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
           <div className="flex justify-end">
+          <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+            onClick={handleSubmit}
+            >
+              Guardar
+            </button> 
             <button
               type="button"
-              className="text-sm font-medium text-gray-500 mr-4"
+              className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={onClose}
             >
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Guardar
-            </button>
+            
           </div>
-        </form>
       </div>
+      {showPopup && (
+        <PopupConfirmacion
+          message="¡El tipo de usuario se ha cambiado correctamente!"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

@@ -43,6 +43,7 @@ const CambiarPermisosPopup = ({
     );
     console.log(rajosSeleccionados);
     try {
+      await deletePermission(usuario.correo);
       // Agregar los nuevos permisos llamando a la función addPermission de la API
       await Promise.all(
         rajoxPermisos.map(async (rajo) => {
@@ -59,7 +60,7 @@ const CambiarPermisosPopup = ({
         Rajo: rajo.Rajo,
         Permiso: permisosSeleccionados[rajo.Rajo] ? "True" : "False",
       }));
-      // Asegurarnos de que usuario.permisos sea un array antes de usar some()
+      /*// Asegurarnos de que usuario.permisos sea un array antes de usar some()
       const hasPermisos =
         Array.isArray(usuario.permisos) &&
         usuario.permisos.some((rajo) => rajo.Permiso === "True");
@@ -76,7 +77,8 @@ const CambiarPermisosPopup = ({
         })
         .catch((error) => {
           console.error(error);
-        });
+        });*/
+        return
     } catch (error) {
       console.error("Error al agregar permisos:", error);
       // Manejar el error según tus necesidades.
@@ -113,6 +115,31 @@ const CambiarPermisosPopup = ({
     }
   };
 
+  const deletePermission = async (correo) => {
+    console.log("correo:", correo);
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}root/deleteAllPermissions`;
+      const response = await axios.post(
+        url,
+        {
+          email: correo,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Permitir cualquier origen (esto es innecesario en el cliente)
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE", // Métodos HTTP permitidos (esto es innecesario en el cliente)
+            "Access-Control-Allow-Headers": "Content-Type, Authorization", // Encabezados permitidos (esto es innecesario en el cliente)
+            Authorization: `${getCookie("token")}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
   if (!usuario) {
     return null;
   }
@@ -123,7 +150,7 @@ const CambiarPermisosPopup = ({
         <h2 className="text-lg font-semibold mb-4 text-TextLight dark:text-TextDark">
           Cambiar permisos del usuario
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Permisos:</label>
             <div>
@@ -182,23 +209,25 @@ const CambiarPermisosPopup = ({
             </div>
           </div>
           <div className="flex justify-end">
-            <button
-              type="button"
-              className="text-sm font-medium text-gray-500 mr-4"
-              onClick={onClose}
-            >
-              Cancelar
-            </button>
-            <button
+          <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
               onClick={handleSubmit}
             >
               Guardar
             </button>
+            <button
+              type="button"
+              className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
+              onClick={onClose}
+            >
+              Cancelar
+            </button>
+            
           </div>
-        </form>
+          </form>
       </div>
+      
     </div>
   );
 };
